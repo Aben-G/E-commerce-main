@@ -214,19 +214,19 @@ button {
 .hero {
     background: linear-gradient(135deg, #2563eb, #3b82f6);
     color: white;
-    padding: 5rem 0;
+    padding: 3rem 0; /* Reduced from 5rem 0 */
     text-align: center;
 }
 
 .hero-content h1 {
-    font-size: 3rem;
+    font-size: 2.5rem; /* Reduced from 3rem */
     margin-bottom: 1rem;
     line-height: 1.2;
 }
 
 .hero-content p {
-    font-size: 1.25rem;
-    margin-bottom: 2rem;
+    font-size: 1.1rem; /* Reduced from 1.25rem */
+    margin-bottom: 1.5rem; /* Reduced from 2rem */
     opacity: 0.9;
 }
 
@@ -1251,11 +1251,11 @@ button {
     .hero-content h1 {
         font-size: 2.5rem;
     }
-    
+
     .newsletter-form {
         flex-direction: column;
     }
-    
+
     .newsletter-form button {
         padding: 0.875rem 1.25rem;
     }
@@ -1268,7 +1268,7 @@ button {
     }
     
     .hero {
-        padding: 3rem 0;
+        padding: 2rem 0; /* Further reduced for mobile */
     }
     
     .hero-content h1 {
@@ -1617,7 +1617,7 @@ body.dark-theme .theme-toggle-btn:hover {
 }
 
 /* Dark theme for featured products */
-body.dark-theme .featured-products {
+body.dark-theme .carousel-slide {
     background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
 }
 
@@ -1666,8 +1666,8 @@ body.dark-theme .social-links a {
 }
 
 /* Dark theme for carousel */
-body.dark-theme .carousel-slide {
-    background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
+body.dark-theme .hero {
+    background: linear-gradient(135deg, #1f2937, #111827);
 }
 
 body.dark-theme .slide-category {
