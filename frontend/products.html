@@ -106,6 +106,70 @@
         </div>
     </section>
 
+    <!-- Product Detail Modal -->
+    <div class="product-modal" id="productModal">
+        <div class="modal-overlay" id="modalOverlay"></div>
+        <div class="modal-content">
+            <button class="modal-close" id="modalClose">&times;</button>
+
+            <div class="modal-body">
+                <div class="modal-image">
+                    <img id="modalProductImage" src="" alt="">
+                    <div class="modal-thumbnails" id="modalThumbnails">
+                        <!-- Thumbnails will be added dynamically -->
+                    </div>
+                </div>
+
+                <div class="modal-info">
+                    <h2 id="modalProductName"></h2>
+                    <div class="modal-rating" id="modalProductRating">
+                        <!-- Rating stars will be added dynamically -->
+                    </div>
+                    <div class="modal-price">
+                        <span class="current-price" id="modalProductPrice"></span>
+                        <span class="old-price" id="modalProductOldPrice"></span>
+                        <span class="discount" id="modalProductDiscount"></span>
+                    </div>
+
+                    <div class="modal-details">
+                        <h3>Description</h3>
+                        <p id="modalProductDescription"></p>
+
+                        <div class="product-meta">
+                            <div class="meta-item">
+                                <strong>Brand:</strong> <span id="modalProductBrand"></span>
+                            </div>
+                            <div class="meta-item">
+                                <strong>Category:</strong> <span id="modalProductCategory"></span>
+                            </div>
+                            <div class="meta-item">
+                                <strong>SKU:</strong> <span id="modalProductSku"></span>
+                            </div>
+                            <div class="meta-item">
+                                <strong>Stock:</strong> <span id="modalProductStock"></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="modal-actions">
+                        <div class="quantity-selector">
+                            <label>Quantity:</label>
+                            <div class="quantity-controls">
+                                <button class="quantity-btn" id="decreaseQty">-</button>
+                                <input type="number" id="modalQuantity" value="1" min="1" max="10">
+                                <button class="quantity-btn" id="increaseQty">+</button>
+                            </div>
+                        </div>
+
+                        <button class="btn btn-primary btn-add-to-cart" id="modalAddToCart">
+                            <i class="fas fa-shopping-cart"></i> Add to Cart
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- Newsletter -->
     <section class="newsletter">
         <div class="container">
@@ -190,6 +254,28 @@
             let activeCategory = 'all';
             let searchTerm = '';
 
+            // Modal elements
+            const productModal = document.getElementById('productModal');
+            const modalOverlay = document.getElementById('modalOverlay');
+            const modalClose = document.getElementById('modalClose');
+            const modalProductImage = document.getElementById('modalProductImage');
+            const modalProductName = document.getElementById('modalProductName');
+            const modalProductRating = document.getElementById('modalProductRating');
+            const modalProductPrice = document.getElementById('modalProductPrice');
+            const modalProductOldPrice = document.getElementById('modalProductOldPrice');
+            const modalProductDiscount = document.getElementById('modalProductDiscount');
+            const modalProductDescription = document.getElementById('modalProductDescription');
+            const modalProductBrand = document.getElementById('modalProductBrand');
+            const modalProductCategory = document.getElementById('modalProductCategory');
+            const modalProductSku = document.getElementById('modalProductSku');
+            const modalProductStock = document.getElementById('modalProductStock');
+            const modalAddToCart = document.getElementById('modalAddToCart');
+            const decreaseQty = document.getElementById('decreaseQty');
+            const increaseQty = document.getElementById('increaseQty');
+            const modalQuantity = document.getElementById('modalQuantity');
+
+            let currentModalProduct = null;
+
             // Initialize the products page
             async function initializeProductsPage() {
                 try {
@@ -199,6 +285,13 @@
                     if (allProducts.length === 0) {
                         renderNoProducts();
                         return;
+                    }
+
+                    // Check for category parameter in URL and set it
+                    const urlParams = new URLSearchParams(window.location.search);
+                    const categoryParam = urlParams.get('category');
+                    if (categoryParam) {
+                        activeCategory = categoryParam;
                     }
 
                     // Setup search functionality
@@ -244,6 +337,15 @@
                         handleSearch(); // Re-apply search with new category
                     });
                 });
+
+                // Set active category based on URL parameter
+                if (activeCategory && activeCategory !== 'all') {
+                    categoryButtons.forEach(btn => btn.classList.remove('active'));
+                    const activeButton = document.querySelector(`[data-category="${activeCategory}"]`);
+                    if (activeButton) {
+                        activeButton.classList.add('active');
+                    }
+                }
             }
 
             function handleSearch() {
@@ -346,6 +448,18 @@
                 productsCount.textContent = `Showing ${filteredProducts.length} of ${allProducts.length} products`;
                 const productsHTML = filteredProducts.map(createProductCard).join('');
                 productsGrid.innerHTML = productsHTML;
+
+                // Add click event listeners to product cards for modal
+                document.querySelectorAll('.product-card').forEach(card => {
+                    card.addEventListener('click', function(e) {
+                        // Don't open modal if clicking on add to cart button
+                        if (e.target.closest('.btn-add-to-cart')) {
+                            return;
+                        }
+                        const productId = parseInt(this.dataset.id);
+                        openProductModal(productId);
+                    });
+                });
             }
 
             function renderNoProducts() {
@@ -389,7 +503,7 @@
 
             function createProductCard(product) {
                 return `
-                    <div class="product-card">
+                    <div class="product-card" data-id="${product.id}">
                         <img src="${product.image_url || 'https://via.placeholder.com/200'}" alt="${product.name}" class="product-img">
                         <div class="product-info">
                             <h3 class="product-title">${product.name}</h3>
@@ -436,6 +550,128 @@
                 filteredProducts = [...allProducts];
                 applySort();
             };
+
+            // Modal functions
+            function openProductModal(productId) {
+                const product = allProducts.find(p => p.id === productId);
+                if (!product) return;
+
+                currentModalProduct = product;
+
+                // Populate modal with product data
+                modalProductImage.src = product.image_url || 'https://via.placeholder.com/400';
+                modalProductImage.alt = product.name;
+                modalProductName.textContent = product.name;
+
+                // Set rating
+                const ratingHTML = renderStars(product.rating || 0);
+                modalProductRating.innerHTML = `${ratingHTML} <span class="rating-text">(${product.rating || 0})</span>`;
+
+                // Set price
+                modalProductPrice.textContent = `$${parseFloat(product.price).toFixed(2)}`;
+                if (product.oldPrice) {
+                    modalProductOldPrice.textContent = `$${parseFloat(product.oldPrice).toFixed(2)}`;
+                    const discount = Math.round(((product.oldPrice - product.price) / product.oldPrice) * 100);
+                    modalProductDiscount.textContent = `-${discount}%`;
+                } else {
+                    modalProductOldPrice.textContent = '';
+                    modalProductDiscount.textContent = '';
+                }
+
+                // Set other details
+                modalProductDescription.textContent = product.description || 'No description available.';
+                modalProductBrand.textContent = product.brand || 'N/A';
+                modalProductCategory.textContent = product.category || 'N/A';
+                modalProductSku.textContent = product.sku || 'N/A';
+                modalProductStock.textContent = product.stock ? `${product.stock} in stock` : 'Out of stock';
+
+                // Reset quantity to 1
+                modalQuantity.value = 1;
+
+                // Show modal
+                productModal.classList.add('active');
+                document.body.style.overflow = 'hidden';
+            }
+
+            function closeProductModal() {
+                productModal.classList.remove('active');
+                document.body.style.overflow = '';
+                currentModalProduct = null;
+            }
+
+            // Setup modal event listeners
+            if (modalOverlay) modalOverlay.addEventListener('click', closeProductModal);
+            if (modalClose) modalClose.addEventListener('click', closeProductModal);
+
+            // Quantity controls
+            if (decreaseQty) {
+                decreaseQty.addEventListener('click', function() {
+                    const currentQty = parseInt(modalQuantity.value);
+                    if (currentQty > 1) {
+                        modalQuantity.value = currentQty - 1;
+                    }
+                });
+            }
+
+            if (increaseQty) {
+                increaseQty.addEventListener('click', function() {
+                    const currentQty = parseInt(modalQuantity.value);
+                    if (currentQty < 10) {
+                        modalQuantity.value = currentQty + 1;
+                    }
+                });
+            }
+
+            if (modalQuantity) {
+                modalQuantity.addEventListener('change', function() {
+                    const qty = parseInt(this.value);
+                    if (qty < 1) this.value = 1;
+                    if (qty > 10) this.value = 10;
+                });
+            }
+
+            // Modal add to cart
+            if (modalAddToCart) {
+                modalAddToCart.addEventListener('click', function() {
+                    if (!currentModalProduct) return;
+
+                    const quantity = parseInt(modalQuantity.value);
+                    addProductToCart(currentModalProduct, quantity);
+                    closeProductModal();
+
+                    // Show notification (you can replace this with a proper notification system)
+                    alert(`${currentModalProduct.name} (${quantity}x) added to cart!`);
+                });
+            }
+
+            // Function to add product to cart (integrates with existing cart system)
+            function addProductToCart(product, quantity = 1) {
+                // Get existing cart from localStorage
+                let cart = JSON.parse(localStorage.getItem('cart') || '[]');
+
+                // Check if product already exists in cart
+                const existingItem = cart.find(item => item.id === product.id);
+
+                if (existingItem) {
+                    existingItem.quantity += quantity;
+                } else {
+                    cart.push({
+                        id: product.id,
+                        name: product.name,
+                        price: product.price,
+                        image: product.image_url || `https://via.placeholder.com/100x100?text=${encodeURIComponent(product.name)}`,
+                        quantity: quantity
+                    });
+                }
+
+                // Save back to localStorage
+                localStorage.setItem('cart', JSON.stringify(cart));
+
+                // Update cart count in header (if the function exists)
+                if (typeof updateCartCount === 'function') {
+                    updateCartCount();
+                }
+            }
 
             // Initialize the page
             initializeProductsPage();
@@ -595,17 +831,314 @@
             border-color: #60a5fa;
         }
 
-        /* Responsive adjustments for category filters */
+        /* Product Modal Styles */
+        .product-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 2000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .product-modal.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .modal-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(2px);
+        }
+
+        .modal-content {
+            position: relative;
+            background: var(--card-bg);
+            border-radius: var(--radius);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            max-width: 900px;
+            max-height: 90vh;
+            overflow-y: auto;
+            margin: 1rem;
+            z-index: 2001;
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: none;
+            border: none;
+            font-size: 2rem;
+            color: var(--light-text);
+            cursor: pointer;
+            z-index: 2002;
+            padding: 0.5rem;
+            border-radius: 50%;
+            transition: var(--transition);
+        }
+
+        .modal-close:hover {
+            background: rgba(0, 0, 0, 0.1);
+            color: var(--text-color);
+        }
+
+        .modal-body {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            padding: 2rem;
+        }
+
+        .modal-image {
+            position: relative;
+        }
+
+        .modal-image img {
+            width: 100%;
+            height: 400px;
+            object-fit: cover;
+            border-radius: var(--radius);
+            margin-bottom: 1rem;
+        }
+
+        .modal-thumbnails {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+
+        .modal-thumbnails img {
+            width: 60px;
+            height: 60px;
+            object-fit: cover;
+            border-radius: 0.25rem;
+            cursor: pointer;
+            border: 2px solid transparent;
+            transition: var(--transition);
+        }
+
+        .modal-thumbnails img.active {
+            border-color: var(--primary-color);
+        }
+
+        .modal-info {
+            padding-left: 1rem;
+        }
+
+        .modal-info h2 {
+            font-size: 1.8rem;
+            margin-bottom: 1rem;
+            color: var(--text-color);
+        }
+
+        .modal-rating {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .modal-rating i {
+            color: #ffd700;
+            font-size: 1rem;
+        }
+
+        .modal-price {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .modal-price .current-price {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--primary-color);
+        }
+
+        .modal-price .old-price {
+            font-size: 1.2rem;
+            color: var(--light-text);
+            text-decoration: line-through;
+        }
+
+        .modal-price .discount {
+            background: #ef4444;
+            color: white;
+            padding: 0.25rem 0.5rem;
+            border-radius: 0.25rem;
+            font-size: 0.875rem;
+            font-weight: 600;
+        }
+
+        .modal-details h3 {
+            margin-bottom: 0.5rem;
+            color: var(--text-color);
+        }
+
+        .modal-details p {
+            color: var(--light-text);
+            line-height: 1.6;
+            margin-bottom: 1.5rem;
+        }
+
+        .product-meta {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .meta-item {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .meta-item strong {
+            color: var(--text-color);
+        }
+
+        .meta-item span {
+            color: var(--light-text);
+        }
+
+        .modal-actions {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .quantity-selector {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .quantity-controls {
+            display: flex;
+            align-items: center;
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius);
+            overflow: hidden;
+        }
+
+        .quantity-btn {
+            background: var(--card-bg);
+            border: none;
+            padding: 0.5rem 0.75rem;
+            cursor: pointer;
+            color: var(--text-color);
+            font-size: 1rem;
+            transition: var(--transition);
+        }
+
+        .quantity-btn:hover {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        .quantity-controls input {
+            width: 50px;
+            text-align: center;
+            border: none;
+            padding: 0.5rem;
+            background: var(--card-bg);
+            color: var(--text-color);
+            font-size: 0.875rem;
+        }
+
+        .btn-add-to-cart {
+            padding: 0.75rem 2rem;
+            font-size: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        /* Dark theme adjustments for modal */
+        body.dark-theme .modal-content {
+            background: #1f2937;
+            border: 1px solid #374151;
+        }
+
+        body.dark-theme .modal-close {
+            color: #9ca3af;
+        }
+
+        body.dark-theme .modal-close:hover {
+            background: rgba(255, 255, 255, 0.1);
+            color: #e5e7eb;
+        }
+
+        body.dark-theme .quantity-controls {
+            border-color: #4b5563;
+        }
+
+        body.dark-theme .quantity-btn {
+            background: #374151;
+            color: #e5e7eb;
+        }
+
+        body.dark-theme .quantity-controls input {
+            background: #374151;
+            color: #e5e7eb;
+        }
+
+        /* Responsive modal */
         @media (max-width: 768px) {
-            .category-filters {
-                justify-content: center;
-                margin: 1rem 0;
-                padding-bottom: 1rem;
+            .modal-content {
+                margin: 0.5rem;
+                max-height: 95vh;
             }
 
-            .category-btn {
-                padding: 0.4rem 0.8rem;
-                font-size: 0.8rem;
+            .modal-body {
+                grid-template-columns: 1fr;
+                gap: 1.5rem;
+                padding: 1.5rem;
+            }
+
+            .modal-info {
+                padding-left: 0;
+            }
+
+            .modal-actions {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .quantity-selector {
+                justify-content: center;
+            }
+
+            .product-meta {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .modal-body {
+                padding: 1rem;
+            }
+
+            .modal-image img {
+                height: 250px;
+            }
+
+            .modal-info h2 {
+                font-size: 1.5rem;
             }
         }
     </style>

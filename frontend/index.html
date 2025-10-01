@@ -64,15 +64,33 @@
         </div>
     </section>
 
-    <!-- Featured Products -->
+    <!-- Featured Products Carousel -->
     <section class="featured-products" id="featured">
         <div class="container">
             <div class="section-header">
                 <h2>Featured Products</h2>
                 <a href="products.html" class="view-all">View All</a>
             </div>
-            <div class="product-grid" id="featuredProducts">
-                <!-- Products will be loaded dynamically -->
+
+            <div class="carousel-container">
+                <div class="carousel-wrapper">
+                    <div class="carousel-track" id="carouselTrack">
+                        <!-- Product slides will be loaded dynamically -->
+                    </div>
+                </div>
+
+                <!-- Carousel Navigation -->
+                <button class="carousel-btn carousel-btn-prev" id="carouselPrev">
+                    <i class="fas fa-chevron-left"></i>
+                </button>
+                <button class="carousel-btn carousel-btn-next" id="carouselNext">
+                    <i class="fas fa-chevron-right"></i>
+                </button>
+
+                <!-- Carousel Indicators -->
+                <div class="carousel-indicators" id="carouselIndicators">
+                    <!-- Indicators will be added dynamically -->
+                </div>
             </div>
         </div>
     </section>
