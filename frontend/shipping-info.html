@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shipping Information - TechGadget</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/shipping-info.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    <a href="index.html">TechGadget</a>
+                </div>
+                <nav class="main-nav">
+                    <ul>
+                        <li><a href="index.html">Home</a></li>
+                        <li><a href="products.html">Products</a></li>
+                        <li><a href="about.html">About</a></li>
+                        <li><a href="contact.html">Contact</a></li>
+                    </ul>
+                </nav>
+                <div class="header-actions">
+                    <button class="search-btn" aria-label="Search">
+                        <i class="fas fa-search"></i>
+                    </button>
+                    <a href="cart.html" class="cart-btn" aria-label="Shopping Cart">
+                        <i class="fas fa-shopping-cart"></i>
+                        <span class="cart-count">0</span>
+                    </a>
+                    <a href="login.html" class="auth-btn">Login</a>
+                    <button id="theme-toggle" class="theme-toggle-btn" aria-label="Toggle Theme">
+                        <i class="fas fa-moon"></i>
+                    </button>
+                    <button class="mobile-menu-btn" aria-label="Menu">
+                        <i class="fas fa-bars"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Shipping Information -->
+    <main class="shipping-info">
+        <div class="container">
+            <div class="page-header">
+                <h1>Shipping Information</h1>
+                <p>Everything you need to know about our shipping policies and delivery options</p>
+            </div>
+
+            <div class="shipping-content">
+                <div class="shipping-tabs">
+                    <button class="tab-btn active" data-tab="domestic">Domestic Shipping</button>
+                    <button class="tab-btn" data-tab="international">International Shipping</button>
+                    <button class="tab-btn" data-tab="tracking">Order Tracking</button>
+                    <button class="tab-btn" data-tab="faq">Shipping FAQ</button>
+                </div>
+
+                <div class="tab-content">
+                    <!-- Domestic Shipping -->
+                    <div class="tab-pane active" id="domestic">
+                        <div class="shipping-section">
+                            <h2><i class="fas fa-truck"></i> Domestic Shipping Options</h2>
+                            <p>We offer several shipping options for orders within the United States:</p>
+                            
+                            <div class="shipping-options">
+                                <div class="shipping-option">
+                                    <div class="option-header">
+                                        <h3>Standard Shipping</h3>
+                                        <span class="price">Free</span>
+                                    </div>
+                                    <p>Estimated delivery: 3-5 business days</p>
+                                    <ul>
+                                        <li>Free on all orders over $50</li>
+                                        <li>Order processing: 1-2 business days</li>
+                                        <li>Delivered by USPS or FedEx Ground</li>
+                                    </ul>
+                                </div>
+                                
+                                <div class="shipping-option">
+                                    <div class="option-header">
+                                        <h3>Expedited Shipping</h3>
+                                        <span class="price">$9.99</span>
+                                    </div>
+                                    <p>Estimated delivery: 2-3 business days</p>
+                                    <ul>
+                                        <li>Available for most items</li>
+                                        <li>Order processing: 1 business day</li>
+                                        <li>Delivered by FedEx 2Day</li>
+                                    </ul>
+                                </div>
+                                
+                                <div class="shipping-option">
+                                    <div class="option-header">
+                                        <h3>Overnight Shipping</h3>
+                                        <span class="price">$24.99</span>
+                                    </div>
+                                    <p>Estimated delivery: Next business day</p>
+                                    <ul>
+                                        <li>Order by 12 PM EST for next day delivery</li>
+                                        <li>Not available for all products</li>
+                                        <li>Delivered by FedEx Overnight</li>
+                                    </ul>
+                                </div>
+                            </div>
+                            
+                            <div class="shipping-notice">
+                                <h4><i class="fas fa-info-circle"></i> Important Notes:</h4>
+                                <ul>
+                                    <li>Delivery times are estimates and not guaranteed</li>
+                                    <li>Business days are Monday through Friday, excluding holidays</li>
+                                    <li>Some remote areas may experience longer delivery times</li>
+                                    <li>Signature may be required for delivery of high-value items</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- International Shipping -->
+                    <div class="tab-pane" id="international">
+                        <div class="shipping-section">
+                            <h2><i class="fas fa-globe-americas"></i> International Shipping</h2>
+                            <p>We ship to over 100 countries worldwide. Please review the information below for international shipping details.</p>
+                            
+                            <div class="shipping-options">
+                                <div class="shipping-option">
+                                    <div class="option-header">
+                                        <h3>Standard International</h3>
+                                        <span class="price">$14.99+</span>
+                                    </div>
+                                    <p>Estimated delivery: 7-21 business days</p>
+                                    <ul>
+                                        <li>Price varies by destination</li>
+                                        <li>Delivered by USPS International or FedEx International</li>
+                                        <li>Customs fees may apply</li>
+                                    </ul>
+                                </div>
+                                
+                                <div class="shipping-option">
+                                    <div class="option-header">
+                                        <h3>Expedited International</h3>
+                                        <span class="price">$29.99+</span>
+                                    </div>
+                                    <p>Estimated delivery: 3-7 business days</p>
+                                    <ul>
+                                        <li>Price varies by destination</li>
+                                        <li>Delivered by FedEx International Priority</li>
+                                        <li>Customs fees may apply</li>
+                                    </ul>
+                                </div>
+                            </div>
+                            
+                            <div class="shipping-notice warning">
+                                <h4><i class="fas fa-exclamation-triangle"></i> Important Information:</h4>
+                                <ul>
+                                    <li>Customers are responsible for all import duties, taxes, and customs fees</li>
+                                    <li>International orders may be subject to customs delays</li>
+                                    <li>Some products may not be available for international shipping due to manufacturer restrictions</li>
+                                    <li>Please ensure your shipping address is complete and accurate</li>
+                                </ul>
+                            </div>
+                            
+                            <div class="shipping-countries">
+                                <h4>We ship to these countries:</h4>
+                                <div class="country-list">
+                                    <div class="country-group">
+                                        <h5>North America</h5>
+                                        <p>Canada, Mexico</p>
+                                    </div>
+                                    <div class="country-group">
+                                        <h5>Europe</h5>
+                                        <p>United Kingdom, Germany, France, Spain, Italy, Netherlands, Belgium, Sweden, Switzerland, Austria, Ireland, Denmark, Norway, Finland, Poland, Portugal</p>
+                                    </div>
+                                    <div class="country-group">
+                                        <h5>Asia Pacific</h5>
+                                        <p>Australia, Japan, South Korea, Singapore, Hong Kong, Taiwan, New Zealand, Malaysia, Thailand, India, United Arab Emirates, Saudi Arabia, Israel</p>
+                                    </div>
+                                    <div class="country-group">
+                                        <h5>Other Regions</h5>
+                                        <p>Brazil, South Africa, and more. Contact us if you don't see your country listed.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Order Tracking -->
+                    <div class="tab-pane" id="tracking">
+                        <div class="shipping-section">
+                            <h2><i class="fas fa-map-marked-alt"></i> Track Your Order</h2>
+                            <p>Track the status of your order with your order number and email address.</p>
+                            
+                            <div class="tracking-form">
+                                <div class="form-group">
+                                    <label for="orderNumber">Order Number</label>
+                                    <input type="text" id="orderNumber" placeholder="Enter your order number" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="email">Email Address</label>
+                                    <input type="email" id="email" placeholder="Enter your email address" required>
+                                </div>
+                                <button class="btn btn-primary">Track Order</button>
+                            </div>
+                            
+                            <div class="tracking-results" id="trackingResults" style="display: none;">
+                                <div class="tracking-status">
+                                    <div class="status-header">
+                                        <h3>Order #ORD123456</h3>
+                                        <span class="status-badge shipped">Shipped</span>
+                                    </div>
+                                    <p>Shipped on September 27, 2025</p>
+                                    
+                                    <div class="timeline">
+                                        <div class="timeline-step completed">
+                                            <div class="timeline-icon">
+                                                <i class="fas fa-shopping-cart"></i>
+                                            </div>
+                                            <div class="timeline-content">
+                                                <h4>Order Placed</h4>
+                                                <p>September 26, 2025</p>
+                                            </div>
+                                        </div>
+                                        <div class="timeline-step completed">
+                                            <div class="timeline-icon">
+                                                <i class="fas fa-box-open"></i>
+                                            </div>
+                                            <div class="timeline-content">
+                                                <h4>Processed</h4>
+                                                <p>September 26, 2025</p>
+                                            </div>
+                                        </div>
+                                        <div class="timeline-step active">
+                                            <div class="timeline-icon">
+                                                <i class="fas fa-truck"></i>
+                                            </div>
+                                            <div class="timeline-content">
+                                                <h4>Shipped</h4>
+                                                <p>In transit - Arriving October 2, 2025</p>
+                                                <p class="tracking-number">Tracking #: 1Z999AA1234567890</p>
+                                                <a href="#" class="tracking-link">View detailed tracking</a>
+                                            </div>
+                                        </div>
+                                        <div class="timeline-step">
+                                            <div class="timeline-icon">
+                                                <i class="fas fa-check-circle"></i>
+                                            </div>
+                                            <div class="timeline-content">
+                                                <h4>Delivered</h4>
+                                                <p>Estimated delivery: October 2, 2025</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="shipping-address">
+                                    <h4>Shipping Address</h4>
+                                    <p>John Doe<br>
+                                    123 Main Street<br>
+                                    Apt 4B<br>
+                                    New York, NY 10001<br>
+                                    United States<br>
+                                    Phone: (212) 555-1234</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Shipping FAQ -->
+                    <div class="tab-pane" id="faq">
+                        <div class="shipping-section">
+                            <h2><i class="far fa-question-circle"></i> Shipping FAQ</h2>
+                            
+                            <div class="faq-accordion">
+                                <div class="faq-item">
+                                    <div class="faq-question">
+                                        <h3>How long will it take to receive my order?</h3>
+                                        <i class="fas fa-chevron-down"></i>
+                                    </div>
+                                    <div class="faq-answer">
+                                        <p>Delivery times vary depending on your location and the shipping method selected at checkout. Standard shipping within the US typically takes 3-5 business days after processing. International orders can take 7-21 business days depending on the destination and customs processing times.</p>
+                                    </div>
+                                </div>
+                                
+                                <div class="faq-item">
+                                    <div class="faq-question">
+                                        <h3>Do you offer free shipping?</h3>
+                                        <i class="fas fa-chevron-down"></i>
+                                    </div>
+                                    <div class="faq-answer">
+                                        <p>Yes! We offer free standard shipping on all domestic orders over $50. For orders under $50, a flat rate of $4.99 applies for standard shipping. Free shipping is automatically applied at checkout when your order qualifies.</p>
+                                    </div>
+                                </div>
+                                
+                                <div class="faq-item">
+                                    <div class="faq-question">
+                                        <h3>Can I change my shipping address after placing an order?</h3>
+                                        <i class="fas fa-chevron-down"></i>
+                                    </div>
+                                    <div class="faq-answer">
+                                        <p>We can only change the shipping address if the order hasn't been processed for shipping yet. Please contact our customer service team immediately with your order number and the correct shipping address. We'll do our best to accommodate your request, but we cannot make any guarantees once the order has entered the shipping process.</p>
+                                    </div>
+                                </div>
+                                
+                                <div class="faq-item">
+                                    <div class="faq-question">
+                                        <h3>What should I do if my package is lost or stolen?</h3>
+                                        <i class="fas fa-chevron-down"></i>
+                                    </div>
+                                    <div class="faq-answer">
+                                        <p>If your tracking information shows that your package was delivered but you can't find it, please check with neighbors, building management, or any safe locations where the package might have been left. If you still can't locate it, please contact us within 7 days of the delivery date, and we'll work with the carrier to investigate. For high-value items, we recommend requiring a signature upon delivery.</p>
+                                    </div>
+                                </div>
+                                
+                                <div class="faq-item">
+                                    <div class="faq-question">
+                                        <h3>Do you ship to PO Boxes or APO/FPO addresses?</h3>
+                                        <i class="fas fa-chevron-down"></i>
+                                    </div>
+                                    <div class="faq-answer">
+                                        <p>Yes, we can ship to PO Boxes, APO, FPO, and DPO addresses. Please note that some shipping methods and certain products may not be available for delivery to these addresses. Additionally, delivery times may be longer for military addresses. When shipping to a PO Box, please ensure the shipping method selected is USPS, as other carriers cannot deliver to PO Boxes.</p>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="contact-support">
+                                <p>Still have questions about shipping? Our customer service team is here to help!</p>
+                                <a href="contact.html" class="btn btn-outline">Contact Support</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>TechGadget</h3>
+                    <p>Your trusted partner for the latest in technology and innovation.</p>
+                    <div class="social-links">
+                        <a href="#" aria-label="Facebook"><i class="fab fa-facebook"></i></a>
+                        <a href="#" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+                        <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+                        <a href="#" aria-label="LinkedIn"><i class="fab fa-linkedin"></i></a>
+                    </div>
+                </div>
+                <div class="footer-section">
+                    <h4>Quick Links</h4>
+                    <ul>
+                        <li><a href="index.html">Home</a></li>
+                        <li><a href="products.html">Products</a></li>
+                        <li><a href="about.html">About Us</a></li>
+                        <li><a href="contact.html">Contact</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Customer Service</h4>
+                    <ul>
+                        <li><a href="shipping-info.html">Shipping Info</a></li>
+                        <li><a href="faq.html">FAQ</a></li>
+                        <li><a href="order-tracking.html">Order Tracking</a></li>
+                        <li><a href="contact.html">Contact Support</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Contact Info</h4>
+                    <ul>
+                        <li><i class="fas fa-phone"></i> +1 (555) 123-4567</li>
+                        <li><i class="fas fa-envelope"></i> info@techgadget.com</li>
+                        <li><i class="fas fa-map-marker-alt"></i> 123 Tech Street, Silicon Valley, CA</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 TechGadget. All rights reserved.</p>
+                <div class="payment-methods">
+                    <i class="fab fa-cc-visa"></i>
+                    <i class="fab fa-cc-mastercard"></i>
+                    <i class="fab fa-cc-paypal"></i>
+                    <i class="fab fa-apple-pay"></i>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="js/main.js" type="module"></script>
+    <script src="js/theme.js"></script>
+    <script>
+        // Tab functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            const tabBtns = document.querySelectorAll('.tab-btn');
+            const tabPanes = document.querySelectorAll('.tab-pane');
+            
+            tabBtns.forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const tabId = this.getAttribute('data-tab');
+                    
+                    // Update active tab
+                    tabBtns.forEach(btn => btn.classList.remove('active'));
+                    this.classList.add('active');
+                    
+                    // Show active pane
+                    tabPanes.forEach(pane => {
+                        pane.classList.remove('active');
+                        if (pane.id === tabId) {
+                            pane.classList.add('active');
+                        }
+                    });
+                });
+            });
+            
+            // FAQ accordion
+            const faqQuestions = document.querySelectorAll('.faq-question');
+            
+            faqQuestions.forEach(question => {
+                question.addEventListener('click', function() {
+                    const item = this.parentNode;
+                    const isActive = item.classList.contains('active');
+                    
+                    // Close all other items
+                    document.querySelectorAll('.faq-item').forEach(faqItem => {
+                        faqItem.classList.remove('active');
+                    });
+                    
+                    // Toggle current item if it wasn't active
+                    if (!isActive) {
+                        item.classList.add('active');
+                    }
+                });
+            });
+            
+            // Demo tracking form
+            const trackingForm = document.querySelector('.tracking-form');
+            const trackingResults = document.getElementById('trackingResults');
+            
+            if (trackingForm) {
+                trackingForm.addEventListener('submit', function(e) {
+                    e.preventDefault();
+                    trackingResults.style.display = 'block';
+                    
+                    // Scroll to results
+                    trackingResults.scrollIntoView({ behavior: 'smooth' });
+                });
+            }
+        });
+    </script>
+</body>
+</html>

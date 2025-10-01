@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FAQs - TechGadget</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/faq.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    <a href="index.html">TechGadget</a>
+                </div>
+                <nav class="main-nav">
+                    <ul>
+                        <li><a href="index.html">Home</a></li>
+                        <li><a href="products.html">Products</a></li>
+                        <li><a href="about.html">About</a></li>
+                        <li><a href="contact.html">Contact</a></li>
+                    </ul>
+                </nav>
+                <div class="header-actions">
+                    <button class="search-btn" aria-label="Search">
+                        <i class="fas fa-search"></i>
+                    </button>
+                    <a href="cart.html" class="cart-btn" aria-label="Shopping Cart">
+                        <i class="fas fa-shopping-cart"></i>
+                        <span class="cart-count">0</span>
+                    </a>
+                    <a href="login.html" class="auth-btn">Login</a>
+                    <button id="theme-toggle" class="theme-toggle-btn" aria-label="Toggle Theme">
+                        <i class="fas fa-moon"></i>
+                    </button>
+                    <button class="mobile-menu-btn" aria-label="Menu">
+                        <i class="fas fa-bars"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- FAQ Section -->
+    <main class="faq-page">
+        <div class="container">
+            <div class="page-header">
+                <h1>Frequently Asked Questions</h1>
+                <p>Find answers to common questions about our products and services</p>
+            </div>
+
+            <div class="faq-container">
+                <div class="faq-categories">
+                    <h3>Categories</h3>
+                    <ul>
+                        <li class="active" data-category="all">All Questions</li>
+                        <li data-category="shipping">Shipping & Delivery</li>
+                        <li data-category="returns">Returns & Refunds</li>
+                        <li data-category="orders">Ordering</li>
+                        <li data-category="payments">Payments & Pricing</li>
+                        <li data-category="products">Products</li>
+                        <li data-category="account">My Account</li>
+                    </ul>
+                </div>
+
+                <div class="faq-content">
+                    <div class="search-box">
+                        <input type="text" placeholder="Search our FAQs...">
+                        <button><i class="fas fa-search"></i></button>
+                    </div>
+
+                    <div class="faq-accordion">
+                        <div class="faq-category">
+                            <h2>Shipping & Delivery</h2>
+                            <div class="faq-item" data-category="shipping">
+                                <div class="faq-question">
+                                    <h3>How long does shipping take?</h3>
+                                    <i class="fas fa-chevron-down"></i>
+                                </div>
+                                <div class="faq-answer">
+                                    <p>Standard shipping typically takes 3-5 business days within the continental US. For international orders, delivery times vary by country but generally take 7-14 business days. You'll receive a tracking number once your order ships so you can follow its progress.</p>
+                                </div>
+                            </div>
+                            <div class="faq-item" data-category="shipping">
+                                <div class="faq-question">
+                                    <h3>Do you offer expedited shipping?</h3>
+                                    <i class="fas fa-chevron-down"></i>
+                                </div>
+                                <div class="faq-answer">
+                                    <p>Yes, we offer expedited shipping options at checkout. Overnight and 2-day shipping are available for most items. Please note that expedited shipping is not available for all products and delivery times may vary based on your location.</p>
+                                </div>
+                            </div>
+                            <div class="faq-item" data-category="shipping">
+                                <div class="faq-question">
+                                    <h3>How can I track my order?</h3>
+                                    <i class="fas fa-chevron-down"></i>
+                                </div>
+                                <div class="faq-answer">
+                                    <p>Once your order has shipped, you'll receive a shipping confirmation email with a tracking number. You can track your order by clicking the tracking link in the email or by visiting our <a href="order-tracking.html">Order Tracking</a> page and entering your order number and email address.</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="faq-category">
+                            <h2>Returns & Refunds</h2>
+                            <div class="faq-item" data-category="returns">
+                                <div class="faq-question">
+                                    <h3>What is your return policy?</h3>
+                                    <i class="fas fa-chevron-down"></i>
+                                </div>
+                                <div class="faq-answer">
+                                    <p>We offer a 30-day return policy for most items. Items must be in new, unused condition with all original packaging and accessories. Some items may be excluded from returns, such as software, digital downloads, and personalized items. Please see our full <a href="returns.html">Return Policy</a> for details.</p>
+                                </div>
+                            </div>
+                            <div class="faq-item" data-category="returns">
+                                <div class="faq-question">
+                                    <h3>How do I initiate a return?</h3>
+                                    <i class="fas fa-chevron-down"></i>
+                                </div>
+                                <div class="faq-answer">
+                                    <p>To initiate a return, please log in to your account and go to the Order History section. Select the order containing the item you wish to return and follow the return instructions. If you checked out as a guest, please contact our customer service team for assistance.</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="faq-category">
+                            <h2>Ordering</h2>
+                            <div class="faq-item" data-category="orders">
+                                <div class="faq-question">
+                                    <h3>How do I place an order?</h3>
+                                    <i class="fas fa-chevron-down"></i>
+                                </div>
+                                <div class="faq-answer">
+                                    <p>Placing an order is easy! Simply browse our products, add items to your cart, and proceed to checkout. You'll need to provide shipping and payment information to complete your purchase. You can check out as a guest or create an account for faster checkout in the future.</p>
+                                </div>
+                            </div>
+                            <div class="faq-item" data-category="orders">
+                                <div class="faq-question">
+                                    <h3>Can I modify or cancel my order?</h3>
+                                    <i class="fas fa-chevron-down"></i>
+                                </div>
+                                <div class="faq-answer">
+                                    <p>We process orders quickly to ensure fast delivery. If you need to modify or cancel your order, please contact our customer service team immediately. We'll do our best to accommodate your request if your order hasn't been shipped yet.</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="faq-category">
+                            <h2>Payments & Pricing</h2>
+                            <div class="faq-item" data-category="payments">
+                                <div class="faq-question">
+                                    <h3>What payment methods do you accept?</h3>
+                                    <i class="fas fa-chevron-down"></i>
+                                </div>
+                                <div class="faq-answer">
+                                    <p>We accept all major credit cards (Visa, Mastercard, American Express, Discover), PayPal, Apple Pay, and Google Pay. All transactions are secure and encrypted for your protection.</p>
+                                </div>
+                            </div>
+                            <div class="faq-item" data-category="payments">
+                                <div class="faq-question">
+                                    <h3>When will I be charged for my order?</h3>
+                                    <i class="fas fa-chevron-down"></i>
+                                </div>
+                                <div class="faq-answer">
+                                    <p>Your payment method will be authorized when you place your order, but the actual charge will be processed when your order ships. For pre-orders, your card will be charged when the item is ready to ship.</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="faq-category">
+                            <h2>Products</h2>
+                            <div class="faq-item" data-category="products">
+                                <div class="faq-question">
+                                    <h3>Do you offer warranties on your products?</h3>
+                                    <i class="fas fa-chevron-down"></i>
+                                </div>
+                                <div class="faq-answer">
+                                    <p>Most of our products come with a manufacturer's warranty. The length and terms of the warranty vary by product. Please check the product description for specific warranty information. Our customer service team can also assist with warranty claims.</p>
+                                </div>
+                            </div>
+                            <div class="faq-item" data-category="products">
+                                <div class="faq-question">
+                                    <h3>How do I know if a product is in stock?</h3>
+                                    <i class="fas fa-chevron-down"></i>
+                                </div>
+                                <div class="faq-answer">
+                                    <p>Product availability is shown on each product page. If an item is out of stock, you may be able to sign up for back-in-stock notifications. We update our inventory in real-time, but occasionally items may sell out quickly.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="contact-support">
+                <div class="support-content">
+                    <i class="fas fa-headset"></i>
+                    <h2>Still have questions?</h2>
+                    <p>Our customer support team is here to help</p>
+                    <a href="contact.html" class="btn btn-primary">Contact Support</a>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>TechGadget</h3>
+                    <p>Your trusted partner for the latest in technology and innovation.</p>
+                    <div class="social-links">
+                        <a href="#" aria-label="Facebook"><i class="fab fa-facebook"></i></a>
+                        <a href="#" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+                        <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+                        <a href="#" aria-label="LinkedIn"><i class="fab fa-linkedin"></i></a>
+                    </div>
+                </div>
+                <div class="footer-section">
+                    <h4>Quick Links</h4>
+                    <ul>
+                        <li><a href="index.html">Home</a></li>
+                        <li><a href="products.html">Products</a></li>
+                        <li><a href="about.html">About Us</a></li>
+                        <li><a href="contact.html">Contact</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Customer Service</h4>
+                    <ul>
+                        <li><a href="shipping-info.html">Shipping Info</a></li>
+                        <li><a href="faq.html">FAQ</a></li>
+                        <li><a href="order-tracking.html">Order Tracking</a></li>
+                        <li><a href="contact.html">Contact Support</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Contact Info</h4>
+                    <ul>
+                        <li><i class="fas fa-phone"></i> +1 (555) 123-4567</li>
+                        <li><i class="fas fa-envelope"></i> info@techgadget.com</li>
+                        <li><i class="fas fa-map-marker-alt"></i> 123 Tech Street, Silicon Valley, CA</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 TechGadget. All rights reserved.</p>
+                <div class="payment-methods">
+                    <i class="fab fa-cc-visa"></i>
+                    <i class="fab fa-cc-mastercard"></i>
+                    <i class="fab fa-cc-paypal"></i>
+                    <i class="fab fa-apple-pay"></i>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="js/main.js" type="module"></script>
+    <script src="js/theme.js"></script>
+    <script>
+        // FAQ Accordion Functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            const faqQuestions = document.querySelectorAll('.faq-question');
+            
+            faqQuestions.forEach(question => {
+                question.addEventListener('click', function() {
+                    const item = this.parentNode;
+                    const isActive = item.classList.contains('active');
+                    
+                    // Close all other items
+                    document.querySelectorAll('.faq-item').forEach(faqItem => {
+                        faqItem.classList.remove('active');
+                    });
+                    
+                    // Toggle current item if it wasn't active
+                    if (!isActive) {
+                        item.classList.add('active');
+                    }
+                });
+            });
+
+            // FAQ Category Filtering
+            const categoryItems = document.querySelectorAll('.faq-categories li');
+            
+            categoryItems.forEach(item => {
+                item.addEventListener('click', function() {
+                    const category = this.getAttribute('data-category');
+                    
+                    // Update active category
+                    categoryItems.forEach(i => i.classList.remove('active'));
+                    this.classList.add('active');
+                    
+                    // Show/hide questions based on category
+                    document.querySelectorAll('.faq-item').forEach(question => {
+                        if (category === 'all' || question.getAttribute('data-category') === category) {
+                            question.style.display = 'block';
+                        } else {
+                            question.style.display = 'none';
+                        }
+                    });
+                    
+                    // Show/hide category headers
+                    document.querySelectorAll('.faq-category').forEach(header => {
+                        if (category === 'all' || 
+                            header.querySelector(`.faq-item[data-category="${category}"]`)) {
+                            header.style.display = 'block';
+                        } else {
+                            header.style.display = 'none';
+                        }
+                    });
+                });
+            });
+
+            // FAQ Search Functionality
+            const searchInput = document.querySelector('.search-box input');
+            searchInput.addEventListener('input', function() {
+                const searchTerm = this.value.toLowerCase();
+                
+                if (searchTerm.length > 0) {
+                    document.querySelectorAll('.faq-item').forEach(item => {
+                        const question = item.querySelector('h3').textContent.toLowerCase();
+                        const answer = item.querySelector('.faq-answer').textContent.toLowerCase();
+                        
+                        if (question.includes(searchTerm) || answer.includes(searchTerm)) {
+                            item.style.display = 'block';
+                            // Show parent category
+                            item.closest('.faq-category').style.display = 'block';
+                        } else {
+                            item.style.display = 'none';
+                        }
+                    });
+                    
+                    // Hide empty categories
+                    document.querySelectorAll('.faq-category').forEach(category => {
+                        const visibleItems = category.querySelectorAll('.faq-item[style="display: block;"]');
+                        if (visibleItems.length === 0) {
+                            category.style.display = 'none';
+                        }
+                    });
+                } else {
+                    // Reset to show all when search is cleared
+                    document.querySelectorAll('.faq-item, .faq-category').forEach(el => {
+                        el.style.display = 'block';
+                    });
+                }
+            });
+        });
+    </script>
+</body>
+</html>

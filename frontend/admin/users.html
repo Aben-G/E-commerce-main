@@ -1,0 +1,636 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manage Users - Admin Dashboard</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.5/css/dataTables.bootstrap5.min.css">
+    <link rel="stylesheet" href="css/admin.css">
+    <style>
+        .status {
+            padding: 0.25rem 0.5rem;
+            border-radius: 50px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: capitalize;
+            display: inline-block;
+        }
+
+        .status.active {
+            background-color: rgba(28, 200, 138, 0.1);
+            color: #1cc88a;
+        }
+
+        .status.inactive {
+            background-color: rgba(231, 74, 59, 0.1);
+            color: #e74a3b;
+        }
+
+        .status.admin {
+            background-color: rgba(78, 115, 223, 0.1);
+            color: #4e73df;
+        }
+    </style>
+</head>
+
+<body class="admin">
+    <div class="admin-container">
+        <aside class="admin-sidebar">
+            <div class="admin-logo">
+                <h2>TechGadget</h2>
+                <span>Admin Panel</span>
+            </div>
+            <nav class="admin-nav">
+                <ul>
+                    <li>
+                        <a href="index.html">
+                            <i class="fas fa-tachometer-alt"></i>
+                            <span>Dashboard</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="products.html">
+                            <i class="fas fa-box"></i>
+                            <span>Products</span>
+                        </a>
+                    </li>
+                    <li class="active">
+                        <a href="users.html">
+                            <i class="fas fa-users"></i>
+                            <span>Users</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#" id="logoutButton">
+                            <i class="fas fa-sign-out-alt"></i>
+                            <span>Logout</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+        </aside>
+
+        <main class="admin-main">
+            <header class="admin-header">
+                <div class="header-left">
+                    <button class="menu-toggle">
+                        <i class="fas fa-bars"></i>
+                    </button>
+                    <h1>Users</h1>
+                </div>
+                <div class="header-right">
+                    <div class="admin-search">
+                        <input type="text" id="userSearch" placeholder="Search users...">
+                        <i class="fas fa-search"></i>
+                    </div>
+                    <button id="theme-toggle" class="theme-toggle-btn" aria-label="Toggle Theme">
+                        <i class="fas fa-moon"></i>
+                    </button>
+                </div>
+            </header>
+
+            <div class="card mt-4">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h3 class="mb-0">Users</h3>
+                    <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addUserModal">
+                        <i class="fas fa-plus"></i> Add New User
+                    </button>
+                </div>
+                <div class="card-body p-0">
+                    <div class="table-responsive">
+                        <table id="usersTable" class="table table-striped table-hover mb-0">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Username</th>
+                                    <th>Admin</th>
+                                    <th class="text-end">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="usersTableBody">
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <div class="modal fade" id="addUserModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header bg-primary text-white">
+                    <h5 class="modal-title"><i class="fas fa-user-plus me-2"></i>Add New User</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
+                        aria-label="Close"></button>
+                </div>
+                <form id="addUserForm" class="needs-validation" novalidate>
+                    <div class="modal-body">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="username" class="form-label">Username <span
+                                            class="text-danger">*</span></label>
+                                    <div class="input-group">
+                                        <span class="input-group-text"><i class="fas fa-user"></i></span>
+                                        <input type="text" class="form-control" id="username" required>
+                                        <div class="invalid-feedback">
+                                            Please enter a username
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="password" class="form-label">Password <span
+                                            class="text-danger">*</span></label>
+                                    <div class="input-group">
+                                        <span class="input-group-text"><i class="fas fa-lock"></i></span>
+                                        <input type="password" class="form-control" id="password" required
+                                            minlength="6">
+                                        <button class="btn btn-outline-secondary toggle-password" type="button">
+                                            <i class="fas fa-eye"></i>
+                                        </button>
+                                        <div class="invalid-feedback">
+                                            Password must be at least 6 characters
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="confirmPassword" class="form-label">Confirm Password <span
+                                            class="text-danger">*</span></label>
+                                    <div class="input-group">
+                                        <span class="input-group-text"><i class="fas fa-lock"></i></span>
+                                        <input type="password" class="form-control" id="confirmPassword" required>
+                                        <button class="btn btn-outline-secondary toggle-password" type="button">
+                                            <i class="fas fa-eye"></i>
+                                        </button>
+                                        <div class="invalid-feedback">
+                                            Passwords must match
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-check form-switch mb-3">
+                                    <input class="form-check-input" type="checkbox" id="isAdmin"
+                                        style="width: 2.5em; height: 1.5em;">
+                                    <label class="form-check-label ms-2" for="isAdmin">Administrator Access</label>
+                                    <div class="form-text">Grant full admin privileges to this user</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-light" data-bs-dismiss="modal">
+                            <i class="fas fa-times me-1"></i> Cancel
+                        </button>
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-save me-1"></i> Save User
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="editUserModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header bg-primary text-white">
+                    <h5 class="modal-title"><i class="fas fa-user-edit me-2"></i>Edit User</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
+                        aria-label="Close"></button>
+                </div>
+                <form id="editUserForm" class="needs-validation" novalidate>
+                    <input type="hidden" id="editUserId">
+                    <div class="modal-body">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="editUsername" class="form-label">Username <span
+                                            class="text-danger">*</span></label>
+                                    <div class="input-group">
+                                        <span class="input-group-text"><i class="fas fa-user"></i></span>
+                                        <input type="text" class="form-control" id="editUsername" required>
+                                        <div class="invalid-feedback">
+                                            Please enter a username
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="editPassword" class="form-label">New Password</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text"><i class="fas fa-lock"></i></span>
+                                        <input type="password" class="form-control" id="editPassword"
+                                            placeholder="Leave blank to keep current">
+                                        <button class="btn btn-outline-secondary toggle-password" type="button">
+                                            <i class="fas fa-eye"></i>
+                                        </button>
+                                        <div class="form-text">Leave blank to keep current password</div>
+                                    </div>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">Account Settings</label>
+                                    <div class="p-3 bg-light rounded">
+                                        <div class="form-check form-switch mb-2">
+                                            <input class="form-check-input" type="checkbox" id="editIsAdmin"
+                                                style="width: 2.5em; height: 1.5em;">
+                                            <label class="form-check-label ms-2" for="editIsAdmin">Administrator
+                                                Access</label>
+                                            <div class="form-text">Grant full admin privileges to this user</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-light" data-bs-dismiss="modal">
+                            <i class="fas fa-times me-1"></i> Cancel
+                        </button>
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-save me-1"></i> Save Changes
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="deleteUserModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header bg-danger text-white">
+                    <h5 class="modal-title"><i class="fas fa-exclamation-triangle me-2"></i>Confirm Deletion</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
+                        aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="text-center mb-4">
+                        <div class="mb-3">
+                            <i class="fas fa-exclamation-circle text-danger" style="font-size: 4rem;"></i>
+                        </div>
+                        <h5>Are you sure?</h5>
+                        <p class="text-muted">You are about to delete the user account for <strong
+                                id="userToDelete"></strong>. This action cannot be undone and all associated data will
+                            be permanently removed.</p>
+                        <div class="alert alert-warning mt-3" role="alert">
+                            <i class="fas fa-exclamation-triangle me-2"></i>
+                            <strong>Warning:</strong> This action is irreversible. Please confirm you want to proceed.
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-light" data-bs-dismiss="modal">
+                        <i class="fas fa-times me-1"></i> Cancel
+                    </button>
+                    <button type="button" class="btn btn-danger" id="confirmDelete">
+                        <i class="fas fa-trash-alt me-1"></i> Delete User
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.11.5/js/dataTables.bootstrap5.min.js"></script>
+    <script src="../js/theme.js"></script>
+
+    <script>
+        // Global variables
+        let usersTable;
+        let users = [];
+        let theme = localStorage.getItem('theme') || 'light-theme';
+        document.body.className = theme;
+        let userIdToDelete = null;
+
+        // DOM Ready
+        $(document).ready(function () {
+            // Initialize DataTable with empty data first
+            initializeDataTable();
+
+            // Load users
+            loadUsers();
+
+            // Form validation for add user
+            const addUserForm = document.getElementById('addUserForm');
+            if (addUserForm) {
+                addUserForm.addEventListener('submit', function (e) {
+                    e.preventDefault();
+                    if (addUserForm.checkValidity()) {
+                        addUser();
+                    }
+                    addUserForm.classList.add('was-validated');
+                }, false);
+            }
+
+            // Form validation for edit user
+            const editUserForm = document.getElementById('editUserForm');
+            if (editUserForm) {
+                editUserForm.addEventListener('submit', function (e) {
+                    e.preventDefault();
+                    if (editUserForm.checkValidity()) {
+                        updateUser();
+                    }
+                    editUserForm.classList.add('was-validated');
+                }, false);
+            }
+
+            // Delete User Confirmation
+            $('#confirmDelete').on('click', function () {
+                if (userIdToDelete) {
+                    deleteUser(userIdToDelete);
+                }
+            });
+
+            // Global search functionality
+            $('#userSearch').on('keyup', function () {
+                if ($.fn.DataTable.isDataTable('#usersTable')) {
+                    usersTable.search(this.value).draw();
+                }
+            });
+
+            // Password visibility toggle
+            $(document).on('click', '.toggle-password', function () {
+                const input = $(this).siblings('input');
+                const icon = $(this).find('i');
+                const type = input.attr('type') === 'password' ? 'text' : 'password';
+                input.attr('type', type);
+                icon.toggleClass('fa-eye fa-eye-slash');
+            });
+
+            // Logout button
+            $('#logoutButton').on('click', function (e) {
+                e.preventDefault();
+                localStorage.removeItem('adminToken');
+                window.location.href = 'login.html';
+            });
+        });
+
+        // Load users from API
+        function loadUsers() {
+            // Show loading state
+            const tableBody = document.getElementById('usersTableBody');
+            tableBody.innerHTML = `
+                <tr>
+                    <td colspan="4" class="text-center py-4">
+                        <div class="spinner-border text-primary" role="status">
+                            <span class="visually-hidden">Loading...</span>
+                        </div>
+                        <p class="mt-2 mb-0">Loading users...</p>
+                    </td>
+                </tr>`;
+
+            // Clear existing DataTable if it exists
+            if ($.fn.DataTable.isDataTable('#usersTable')) {
+                usersTable.destroy();
+            }
+
+            $.ajax({
+                url: 'http://localhost:5000/api/users',
+                type: 'GET',
+                headers: {
+                    'Authorization': 'Bearer ' + localStorage.getItem('adminToken')
+                },
+                success: function (response) {
+                    users = response;
+                    renderUsers();
+
+                    // Reinitialize DataTable after loading data
+                    initializeDataTable();
+
+                    // Add event listeners to the new buttons
+                    addButtonEventListeners();
+                },
+                error: function (xhr) {
+                    if (xhr.status === 401) {
+                        window.location.href = 'login.html';
+                    } else {
+                        const errorMsg = xhr.responseJSON?.error || 'Unknown error';
+                        tableBody.innerHTML = `
+                            <tr>
+                                <td colspan="4" class="text-center text-danger py-4">
+                                    <i class="fas fa-exclamation-circle fa-2x mb-2"></i>
+                                    <p class="mb-0">Failed to load users: ${errorMsg}</p>
+                                    <button class="btn btn-sm btn-primary mt-2" onclick="loadUsers()">
+                                        <i class="fas fa-sync-alt me-1"></i> Try Again
+                                    </button>
+                                </td>
+                            </tr>`;
+                    }
+                }
+            });
+        }
+
+        // Initialize DataTable with configuration
+        function initializeDataTable() {
+            // Check if DataTable is already initialized
+            if ($.fn.DataTable.isDataTable('#usersTable')) {
+                // If already initialized, just return
+                return;
+            }
+            
+            // Initialize new DataTable
+            usersTable = $('#usersTable').DataTable({
+                responsive: true,
+                order: [[0, 'asc']], // Sort by ID by default
+                columnDefs: [
+                    { orderable: false, targets: [3] }, // Make actions column not sortable
+                    { className: 'align-middle', targets: '_all' } // Center content vertically
+                ],
+                language: {
+                    emptyTable: 'No users found',
+                    zeroRecords: 'No matching users found'
+                },
+                dom: "<'row'<'col-sm-12 col-md-6'l><'col-sm-12 col-md-6'f>>" +
+                    "<'row'<'col-sm-12'tr>>" +
+                    "<'row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7'p>>"
+            });
+        }
+
+        // Add event listeners to action buttons
+        function addButtonEventListeners() {
+            // Edit button click handler
+            $('.edit-btn').on('click', function () {
+                const userId = $(this).data('id');
+                const user = users.find(u => u.id == userId);
+                if (user) {
+                    openEditModal(user);
+                }
+            });
+
+            // Delete button click handler
+            $('.delete-btn').on('click', function () {
+                const userId = $(this).data('id');
+                const userName = $(this).data('name');
+                openDeleteModal(userId, userName);
+            });
+        }
+
+        // Render users in the table
+        function renderUsers() {
+            const tableBody = document.getElementById('usersTableBody');
+
+            // Clear the DataTable and the table body
+            if ($.fn.DataTable.isDataTable('#usersTable')) {
+                usersTable.clear().destroy();
+            }
+            tableBody.innerHTML = '';
+
+            if (!users || users.length === 0) {
+                initializeDataTable(); // Re-init with empty data to show 'No users found'
+                return;
+            }
+
+            users.forEach(user => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${user.id || 'N/A'}</td>
+                    <td>${user.username || 'N/A'}</td>
+                    <td>${user.is_admin ? 'Yes' : 'No'}</td>
+                    <td class="text-end">
+                        <button class="btn btn-sm btn-outline-primary edit-btn me-1" data-id="${user.id}" title="Edit">
+                            <i class="fas fa-edit"></i>
+                        </button>
+                        <button class="btn btn-sm btn-outline-danger delete-btn" data-id="${user.id}" data-name="${user.username}" title="Delete">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </td>
+                `;
+                tableBody.appendChild(row);
+            });
+
+            // Only initialize DataTable if it's not already initialized
+            if (!$.fn.DataTable.isDataTable('#usersTable')) {
+                initializeDataTable();
+            }
+            addButtonEventListeners();
+        }
+
+        // Open edit user modal
+        function openEditModal(user) {
+            $('#editUserId').val(user.id);
+            $('#editUsername').val(user.username);
+            $('#editIsAdmin').prop('checked', user.is_admin || false);
+
+            const editModal = new bootstrap.Modal(document.getElementById('editUserModal'));
+            editModal.show();
+        }
+
+        // Open delete confirmation modal
+        function openDeleteModal(userId, username) {
+            userIdToDelete = userId;
+            document.getElementById('userToDelete').textContent = username;
+
+            const deleteModal = new bootstrap.Modal(document.getElementById('deleteUserModal'));
+            deleteModal.show();
+        }
+
+        // Add a new user
+        function addUser() {
+            const username = $('#username').val();
+            const password = $('#password').val();
+            const confirmPassword = $('#confirmPassword').val();
+            const isAdmin = $('#isAdmin').is(':checked');
+
+            // Basic validation
+            if (password !== confirmPassword) {
+                alert('Passwords do not match');
+                return;
+            }
+
+            const userData = {
+                username,
+                password,
+                is_admin: isAdmin
+            };
+
+            $.ajax({
+                url: 'http://localhost:5000/api/users',
+                type: 'POST',
+                contentType: 'application/json',
+                headers: {
+                    'Authorization': 'Bearer ' + localStorage.getItem('adminToken')
+                },
+                data: JSON.stringify(userData),
+                success: function (response) {
+                    $('#addUserModal').modal('hide');
+                    $('#addUserForm')[0].reset();
+                    loadUsers();
+                    alert('User added successfully');
+                },
+                error: function (xhr) {
+                    alert('Failed to add user: ' + (xhr.responseJSON?.error || 'Unknown error'));
+                }
+            });
+        }
+
+        // Update an existing user
+        function updateUser() {
+            const userId = $('#editUserId').val();
+            const username = $('#editUsername').val();
+            const password = $('#editPassword').val();
+            const isAdmin = $('#editIsAdmin').is(':checked');
+
+            const userData = {
+                username,
+                is_admin: isAdmin
+            };
+
+            // Only include password if it's not empty
+            if (password) {
+                userData.password = password;
+            }
+
+            $.ajax({
+                url: `http://localhost:5000/api/users/${userId}`,
+                type: 'PUT',
+                contentType: 'application/json',
+                headers: {
+                    'Authorization': 'Bearer ' + localStorage.getItem('adminToken')
+                },
+                data: JSON.stringify(userData),
+                success: function (response) {
+                    $('#editUserModal').modal('hide');
+                    loadUsers();
+                    alert('User updated successfully');
+                },
+                error: function (xhr) {
+                    alert('Failed to update user: ' + (xhr.responseJSON?.error || 'Unknown error'));
+                }
+            });
+        }
+
+        // Delete a user
+        function deleteUser(userId) {
+            $.ajax({
+                url: `http://localhost:5000/api/users/${userId}`,
+                type: 'DELETE',
+                headers: {
+                    'Authorization': 'Bearer ' + localStorage.getItem('adminToken')
+                },
+                success: function (response) {
+                    $('#deleteUserModal').modal('hide');
+                    loadUsers();
+                    alert('User deleted successfully');
+                },
+                error: function (xhr) {
+                    $('#deleteUserModal').modal('hide');
+                    alert('Failed to delete user: ' + (xhr.responseJSON?.error || 'Unknown error'));
+                }
+            });
+        }
+    </script>
+</body>
+
+</html>

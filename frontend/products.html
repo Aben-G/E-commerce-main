@@ -1,0 +1,552 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Products - TechGadget</title>
+    <meta name="description"
+        content="Browse our wide selection of electronics and gadgets at TechGadget. Find the latest smartphones, laptops, and more.">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/products.css">
+
+</head>
+
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    <a href="index.html">TechGadget</a>
+                </div>
+                <nav class="main-nav">
+                    <ul>
+                        <li><a href="index.html">Home</a></li>
+                        <li><a href="products.html" class="active">Products</a></li>
+                        <li><a href="about.html">About</a></li>
+                        <li><a href="contact.html">Contact</a></li>
+                    </ul>
+                </nav>
+                <div class="header-actions">
+                    <a href="cart.html" class="cart-btn" aria-label="Shopping Cart">
+                        <i class="fas fa-shopping-cart"></i>
+                        <span class="cart-count">0</span>
+                    </a>
+                    <button id="theme-toggle" class="theme-toggle-btn" aria-label="Toggle Theme">
+                        <i class="fas fa-moon"></i>
+                    </button>
+                    <button class="mobile-menu-btn" aria-label="Menu">
+                        <i class="fas fa-bars"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Products Header -->
+    <section class="products-header">
+        <div class="container">
+            <h1>All Products</h1>
+            <div class="breadcrumb">
+                <a href="index.html">Home</a>
+                <span class="separator">/</span>
+                <span>Products</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- Products Section -->
+    <section class="products-section section-padding">
+        <div class="container">
+            <button class="filter-toggle" id="filterToggle">
+                <i class="fas fa-sliders-h"></i> Filters
+            </button>
+
+            <div class="products-container">
+                <!-- Filters Sidebar -->
+                <aside class="filters" id="filters">
+                    <button class="close-filters" id="closeFilters">&times;</button>
+
+                    <div class="filter-section">
+                        <h3 class="filter-title">Categories</h3>
+                        <div class="filter-options" id="categoryFilters">
+                            <div class="filter-option">
+                                <input type="checkbox" id="cat-smartphones" checked>
+                                <label for="cat-smartphones">
+                                    <i class="fas fa-mobile-alt"></i>
+                                    <span>Smartphones</span>
+                                </label>
+                                <span class="filter-count" id="smartphones-count">(0)</span>
+                            </div>
+                            <div class="filter-option">
+                                <input type="checkbox" id="cat-laptops" checked>
+                                <label for="cat-laptops">
+                                    <i class="fas fa-laptop"></i>
+                                    <span>Laptops</span>
+                                </label>
+                                <span class="filter-count" id="laptops-count">(0)</span>
+                            </div>
+                            <div class="filter-option">
+                                <input type="checkbox" id="cat-tablets" checked>
+                                <label for="cat-tablets">
+                                    <i class="fas fa-tablet-alt"></i>
+                                    <span>Tablets</span>
+                                </label>
+                                <span class="filter-count" id="tablets-count">(0)</span>
+                            </div>
+                            <div class="filter-option">
+                                <input type="checkbox" id="cat-audio" checked>
+                                <label for="cat-audio">
+                                    <i class="fas fa-headphones"></i>
+                                    <span>Audio</span>
+                                </label>
+                                <span class="filter-count" id="audio-count">(0)</span>
+                            </div>
+                            <div class="filter-option">
+                                <input type="checkbox" id="cat-wearables" checked>
+                                <label for="cat-wearables">
+                                    <i class="fas fa-clock"></i>
+                                    <span>Wearables</span>
+                                </label>
+                                <span class="filter-count" id="wearables-count">(0)</span>
+                            </div>
+                            <div class="filter-option">
+                                <input type="checkbox" id="cat-accessories" checked>
+                                <label for="cat-accessories">
+                                    <i class="fas fa-plug"></i>
+                                    <span>Accessories</span>
+                                </label>
+                                <span class="filter-count" id="accessories-count">(0)</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="filter-section">
+                        <h3 class="filter-title">Price Range</h3>
+                        <div class="price-range">
+                            <div id="priceSlider"></div>
+                            <div class="price-inputs">
+                                <input type="number" id="minPrice" placeholder="Min" min="0" max="5000">
+                                <span>-</span>
+                                <input type="number" id="maxPrice" placeholder="Max" min="0" max="5000">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="filter-section">
+                        <h3 class="filter-title">Brands</h3>
+                        <div class="filter-options" id="brandFilters">
+                            <!-- Brand filters will be loaded dynamically -->
+                        </div>
+                    </div>
+
+                    <div class="filter-section">
+                        <h3 class="filter-title">Rating</h3>
+                        <div class="filter-options" id="ratingFilters">
+                            <!-- Rating filters will be loaded dynamically -->
+                        </div>
+                    </div>
+
+                    <button class="btn btn-primary" style="width: 100%; margin-top: 1rem;">Apply Filters</button>
+                    <button class="btn btn-outline" style="width: 100%; margin-top: 0.5rem;">Reset</button>
+                </aside>
+
+                <!-- Products Grid -->
+                <div class="products-content">
+                    <div class="products-toolbar">
+                        <div class="products-count" id="productsCount">Loading products...</div>
+                        <div class="sort-options">
+                            <label for="sort">Sort by:</label>
+                            <select id="sort">
+                                <option value="featured">Featured</option>
+                                <option value="price-low">Price: Low to High</option>
+                                <option value="price-high">Price: High to Low</option>
+                                <option value="name-asc">Name: A to Z</option>
+                                <option value="name-desc">Name: Z to A</option>
+                                <option value="newest">Newest Arrivals</option>
+                                <option value="bestselling">Best Selling</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="products-grid" id="productsGrid">
+                        <!-- Products will be loaded dynamically -->
+                    </div>
+
+                    <div class="pagination" id="pagination">
+                        <!-- Pagination will be generated dynamically -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Newsletter -->
+    <section class="newsletter">
+        <div class="container">
+            <div class="newsletter-content">
+                <h3>Subscribe to Our Newsletter</h3>
+                <p>Stay updated with our latest products and offers</p>
+                <form class="newsletter-form">
+                    <input type="email" placeholder="Enter your email" required>
+                    <button type="submit" class="btn">Subscribe</button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-col">
+                    <h4>TechGadget</h4>
+                    <p>Your one-stop shop for all electronic gadgets and accessories.</p>
+                    <div class="social-links">
+                        <a href="#" aria-label="Facebook"><i class="fab fa-facebook"></i></a>
+                        <a href="#" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+                        <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+                    </div>
+                </div>
+                <div class="footer-col">
+                    <h4>Quick Links</h4>
+                    <ul>
+                        <li><a href="about.html">About Us</a></li>
+                        <li><a href="contact.html">Contact Us</a></li>
+                        <li><a href="faq.html">FAQs</a></li>
+                        <li><a href="privacy.html">Privacy Policy</a></li>
+                        <li><a href="terms.html">Terms & Conditions</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h4>Customer Service</h4>
+                    <ul>
+                        <li><a href="shipping.html">Shipping Policy</a></li>
+                        <li><a href="returns.html">Return Policy</a></li>
+                        <li><a href="warranty.html">Warranty</a></li>
+                        <li><a href="track-order.html">Track Order</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h4>Contact Info</h4>
+                    <ul class="contact-info">
+                        <li><i class="fas fa-map-marker-alt"></i> 123 Tech Street, Silicon Valley, CA 94025</li>
+                        <li><i class="fas fa-phone"></i> +1 (555) 123-4567</li>
+                        <li><i class="fas fa-envelope"></i> info@techgadget.com</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 TechGadget. All rights reserved.</p>
+                <div class="payment-methods">
+                    <i class="fab fa-cc-visa"></i>
+                    <i class="fab fa-cc-mastercard"></i>
+                    <i class="fab fa-cc-paypal"></i>
+                    <i class="fab fa-apple-pay"></i>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="js/main.js" type="module"></script>
+    <script src="js/theme.js"></script>
+    <script>
+        // Mobile filter toggle
+        const filterToggle = document.getElementById('filterToggle');
+        const filters = document.getElementById('filters');
+        const closeFilters = document.getElementById('closeFilters');
+
+        if (filterToggle && filters) {
+            filterToggle.addEventListener('click', () => {
+                filters.classList.add('active');
+                document.body.style.overflow = 'hidden';
+            });
+        }
+
+        if (closeFilters) {
+            closeFilters.addEventListener('click', () => {
+                filters.classList.remove('active');
+                document.body.style.overflow = '';
+            });
+        }
+
+        // Load products dynamically
+        document.addEventListener('DOMContentLoaded', () => {
+            const productsGrid = document.getElementById('productsGrid');
+            const productsCount = document.getElementById('productsCount');
+
+            async function fetchProducts() {
+                const res = await fetch('http://localhost:5000/api/products');
+                return await res.json();
+            }
+
+            function createProductCard(product) {
+                return `<div class="col-md-4 mb-4">
+                    <div class="product-card">
+                        <img src="${product.image_url || 'https://via.placeholder.com/200'}" alt="${product.name}" class="product-img">
+                        <div class="product-info">
+                            <h3 class="product-title">${product.name}</h3>
+                            <p class="product-price">$${parseFloat(product.price).toFixed(2)}</p>
+                            <p class="product-description">${product.description || ''}</p>
+                        </div>
+                    </div>
+                </div>`;
+            }
+
+            async function renderProducts() {
+                let products = [];
+                try {
+                    products = await fetchProducts();
+                } catch (error) {
+                    products = [];
+                }
+
+                updateCategoryCounts(products);
+
+                if (products.length === 0) {
+                    productsGrid.innerHTML = `
+                        <div class="no-products">
+                            <div class="no-products-icon">
+                                <i class="fas fa-box-open"></i>
+                            </div>
+                            <h3>No Products Available</h3>
+                            <p>There are currently no products in the catalog. Please add products through the admin panel to see them here.</p>
+                            <a href="../admin/products.html" class="btn btn-primary">
+                                <i class="fas fa-plus"></i> Add Products
+                            </a>
+                        </div>
+                    `;
+                    productsCount.textContent = 'No products available';
+                    return;
+                }
+
+                productsCount.textContent = `Showing 1-${products.length} of ${products.length} products`;
+                const productsHTML = products.map(createProductCard).join('');
+                productsGrid.innerHTML = productsHTML;
+            }
+
+            function updateCategoryCounts(products) {
+                // Count products by category
+                const categoryCounts = {
+                    smartphones: 0,
+                    laptops: 0,
+                    tablets: 0,
+                    audio: 0,
+                    wearables: 0,
+                    accessories: 0
+                };
+
+                products.forEach(product => {
+                    const category = product.category.toLowerCase();
+                    if (category.includes('smartphone') || category.includes('phone')) {
+                        categoryCounts.smartphones++;
+                    } else if (category.includes('laptop')) {
+                        categoryCounts.laptops++;
+                    } else if (category.includes('tablet')) {
+                        categoryCounts.tablets++;
+                    } else if (category.includes('headphone') || category.includes('audio') || category.includes('speaker')) {
+                        categoryCounts.audio++;
+                    } else if (category.includes('watch') || category.includes('wearable')) {
+                        categoryCounts.wearables++;
+                    } else {
+                        categoryCounts.accessories++;
+                    }
+                });
+
+                // Update the count displays
+                Object.keys(categoryCounts).forEach(category => {
+                    const countElement = document.getElementById(`${category}-count`);
+                    if (countElement) {
+                        countElement.textContent = `(${categoryCounts[category]})`;
+                    }
+                });
+            }
+
+            // Simple notification function
+            function showSuccessMessage(message) {
+                // Create notification element
+                const notification = document.createElement('div');
+                notification.className = 'notification success';
+                notification.innerHTML = `
+                    <i class="fas fa-check-circle"></i>
+                    <span>${message}</span>
+                `;
+
+                // Add to page
+                document.body.appendChild(notification);
+
+                // Show notification
+                setTimeout(() => notification.classList.add('show'), 100);
+
+                // Remove after 3 seconds
+                setTimeout(() => {
+                    notification.classList.remove('show');
+                    setTimeout(() => document.body.removeChild(notification), 300);
+                }, 3000);
+            }
+
+            if (productsGrid) {
+                renderProducts();
+            }
+        });
+    </script>
+
+    <style>
+        /* Enhanced no-products styling */
+        .no-products {
+            text-align: center;
+            padding: 4rem 2rem;
+            color: var(--light-text);
+            grid-column: 1 / -1;
+            max-width: 500px;
+            margin: 0 auto;
+        }
+
+        .no-products-icon {
+            font-size: 4rem;
+            color: var(--primary-color);
+            margin-bottom: 1.5rem;
+            opacity: 0.7;
+        }
+
+        .no-products h3 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            color: var(--text-color);
+        }
+
+        .no-products p {
+            font-size: 1rem;
+            margin-bottom: 2rem;
+            line-height: 1.6;
+        }
+
+        .no-products .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.75rem 1.5rem;
+            background-color: var(--primary-color);
+            color: white;
+            text-decoration: none;
+            border-radius: var(--radius);
+            font-weight: 500;
+            transition: var(--transition);
+        }
+
+        .no-products .btn:hover {
+            background-color: var(--secondary-color);
+            transform: translateY(-2px);
+        }
+
+        /* Notification styles */
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: #10b981;
+            color: white;
+            padding: 1rem 1.5rem;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow-md);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            transform: translateX(100%);
+            transition: transform 0.3s ease;
+            z-index: 1000;
+            font-weight: 500;
+        }
+
+        .notification.show {
+            transform: translateX(0);
+        }
+
+        .notification.success {
+            background: #10b981;
+        }
+
+        .notification i {
+            font-size: 1.1rem;
+        }
+
+        /* Dark theme for notifications and no-products */
+        body.dark-theme .no-products {
+            color: #9ca3af;
+        }
+
+        body.dark-theme .no-products h3 {
+            color: #e5e7eb;
+        }
+
+        body.dark-theme .no-products-icon {
+            color: #60a5fa;
+        }
+
+        body.dark-theme .notification {
+            background: #059669;
+        }
+    </style>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>TechGadget</h3>
+                    <p>Your trusted partner for the latest in technology and innovation.</p>
+                    <div class="social-links">
+                        <a href="#" aria-label="Facebook"><i class="fab fa-facebook"></i></a>
+                        <a href="#" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+                        <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+                        <a href="#" aria-label="LinkedIn"><i class="fab fa-linkedin"></i></a>
+                    </div>
+                </div>
+                <div class="footer-section">
+                    <h4>Quick Links</h4>
+                    <ul>
+                        <li><a href="index.html">Home</a></li>
+                        <li><a href="products.html">Products</a></li>
+                        <li><a href="about.html">About Us</a></li>
+                        <li><a href="contact.html">Contact</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Customer Service</h4>
+                    <ul>
+                        <li><a href="shipping-info.html">Shipping Info</a></li>
+                        <li><a href="faq.html">FAQ</a></li>
+                        <li><a href="order-tracking.html">Order Tracking</a></li>
+                        <li><a href="contact.html">Contact Support</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Contact Info</h4>
+                    <ul>
+                        <li><i class="fas fa-phone"></i> +1 (555) 123-4567</li>
+                        <li><i class="fas fa-envelope"></i> info@techgadget.com</li>
+                        <li><i class="fas fa-map-marker-alt"></i> 123 Tech Street, Silicon Valley, CA</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 TechGadget. All rights reserved.</p>
+                <div class="payment-methods">
+                    <i class="fab fa-cc-visa"></i>
+                    <i class="fab fa-cc-mastercard"></i>
+                    <i class="fab fa-cc-paypal"></i>
+                    <i class="fab fa-apple-pay"></i>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="js/main.js" type="module"></script>
+    <script src="js/theme.js"></script>
+</body>
+
+</html>
