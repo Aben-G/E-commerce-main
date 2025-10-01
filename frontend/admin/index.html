@@ -13,7 +13,7 @@
     </script>
     <script src="js/authGuard.js"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Dashboard - TechGadget</title>
+    <title>Admin Dashboard - OnLiNE ELECTRONICS</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link rel="stylesheet" href="../css/style.css">
     <link rel="stylesheet" href="css/admin.css">
@@ -23,7 +23,7 @@
         <!-- Sidebar -->
         <aside class="admin-sidebar">
             <div class="admin-logo">
-                <h2>TechGadget</h2>
+                <h2>OnLiNE ELECTRONICS</h2>
                 <span>Admin Panel</span>
             </div>
             <nav class="admin-nav">
@@ -71,33 +71,11 @@
                         <span class="last-updated">Last updated: <span id="lastUpdated">Just now</span></span>
                     </div>
                 </div>
-                <div class="header-right">
-                    <div class="admin-search">
-                        <input type="text" placeholder="Search...">
-                        <i class="fas fa-search"></i>
-                    </div>
-                        <i class="fas fa-moon"></i>
-                    </button>
-                </div>
             </header>
 
             <div class="dashboard-content">
                 <!-- Stats Cards -->
                 <div class="stats-grid">
-                    
-                    <div class="stat-card">
-                        <div class="stat-icon">
-                            <i class="fas fa-dollar-sign"></i>
-                        </div>
-                        <div class="stat-info">
-                            <h3 id="totalRevenue">$0</h3>
-                            <p>Total Revenue</p>
-                        </div>
-                        <div class="stat-trend up">
-                            <i class="fas fa-arrow-up"></i> <span>8%</span>
-                        </div>
-                    </div>
-                    
                     <div class="stat-card">
                         <div class="stat-icon">
                             <i class="fas fa-users"></i>
@@ -105,9 +83,6 @@
                         <div class="stat-info">
                             <h3 id="totalUsers">0</h3>
                             <p>Total Users</p>
-                        </div>
-                        <div class="stat-trend up">
-                            <i class="fas fa-arrow-up"></i> <span>5%</span>
                         </div>
                     </div>
                     
@@ -118,9 +93,6 @@
                         <div class="stat-info">
                             <h3 id="totalProducts">0</h3>
                             <p>Total Products</p>
-                        </div>
-                        <div class="stat-trend down">
-                            <i class="fas fa-arrow-down"></i> <span>2%</span>
                         </div>
                     </div>
                 </div>
@@ -136,99 +108,101 @@
                         </div>
                     </div>
                 </div>
-
-                <!-- Charts Row -->
-                <div class="charts-row">
-                    <div class="chart-container">
-                        <div class="chart-header">
-                            <h3>Sales Overview</h3>
-                            <select id="salesPeriod" class="chart-period">
-                                <option value="7">Last 7 Days</option>
-                                <option value="30" selected>Last 30 Days</option>
-                                <option value="90">Last 90 Days</option>
-                            </select>
-                        </div>
-                        <canvas id="salesChart"></canvas>
-                    </div>
-                    
-                    <div class="chart-container">
-                        <div class="chart-header">
-                            <h3>Top Products</h3>
-                        </div>
-                        <div id="topProducts" class="top-products-list">
-                            <!-- Will be populated by JavaScript -->
-                            <div class="loading">Loading top products...</div>
-                        </div>
-                    </div>
-                </div>
-
-
-                <div class="card">
-                    <div class="card-icon customers">
-                        <i class="fas fa-users"></i>
-                    </div>
-                    <div class="card-info">
-                        <h3>Products</h3>
-                        <h2 id="totalProducts">0</h2>
-                        <p><span class="success" id="productsChange">--</span></p>
-                    </div>
-                </div>
-
-                <div class="card">
-                    <div class="card-icon revenue">
-                        <i class="fas fa-dollar-sign"></i>
-                    </div>
-                    <div class="card-info">
-                        <h3>Revenue</h3>
-                        <p><span class="success" id="revenueChange">--</span></p>
-                    </div>
-                </div>
-            </div>
-                                </thead>
-                                <tbody id="recentOrdersTableBody">
-                                    <!-- Recent orders will be dynamically inserted here -->
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
             </div>
         </main>
     </div>
 
+    <!-- JS -->
     <script src="../js/main.js"></script>
     <script src="../js/theme.js"></script>
     <script src="js/auth.js"></script>
     <script src="js/admin.js"></script>
-    <script type="module">
-        import { getProducts } from '../js/dataManager.js';
+    <script>
+        let refreshInterval;
 
-        function updateDashboard() {
-            const products = getProducts();
-            // In a real app, orders would come from a separate data source
-            const orders = []; 
-
-            // Calculate real data
-            const totalProducts = products.length;
-            const totalSales = 0; // No orders yet
-            const totalOrders = orders.length;
-            const totalRevenue = 0; // No orders yet
-            const avgOrderValue = totalOrders > 0 ? totalRevenue / totalOrders : 0;
-
-            // Update dashboard cards with real data
-            document.getElementById('totalSales').textContent = `$${totalSales.toFixed(2)}`;
-            document.getElementById('totalOrders').textContent = totalOrders;
-            document.getElementById('totalProducts').textContent = totalProducts;
-            document.getElementById('totalRevenue').textContent = `$${totalRevenue.toFixed(2)}`;
-
-            // Update recent orders table
-            const recentOrdersTableBody = document.getElementById('recentOrdersTableBody');
-            recentOrdersTableBody.innerHTML = '<tr><td colspan="6" style="text-align: center; padding: 2rem; color: #6b7280;">No orders yet. Orders will appear here once customers start purchasing.</td></tr>';
+        // ✅ Fetch dashboard stats
+        async function fetchDashboardStats() {
+            try {
+                const res = await fetch('http://localhost:5000/api/dashboard/stats', {
+                    headers: { 
+                        'Authorization': 'Bearer ' + localStorage.getItem('adminToken')
+                    }
+                });
+                if (!res.ok) throw new Error('Failed to fetch stats');
+                return await res.json();
+            } catch (err) {
+                console.error('Dashboard stats error:', err);
+                return null;
+            }
         }
 
+        // ✅ Fetch most recent product
+        async function fetchRecentProduct() {
+            try {
+                const res = await fetch('http://localhost:5000/api/dashboard/recent-product', {
+                    headers: { 
+                        'Authorization': 'Bearer ' + localStorage.getItem('adminToken')
+                    }
+                });
+                if (!res.ok) throw new Error('Failed to fetch recent product');
+                const data = await res.json();
+                return data.product;
+            } catch (err) {
+                console.error('Recent product error:', err);
+                return null;
+            }
+        }
+
+        // ✅ Update dashboard UI
+        async function updateDashboard() {
+            const stats = await fetchDashboardStats();
+            if (stats) {
+                document.getElementById('totalUsers').textContent = stats.totalUsers ?? 0;
+                document.getElementById('totalProducts').textContent = stats.totalProducts ?? 0;
+            }
+
+            const recentProduct = await fetchRecentProduct();
+            const recentDiv = document.getElementById('recentProduct');
+
+            if (recentProduct) {
+                recentDiv.innerHTML = `
+                    <div class="recent-product">
+                        <div class="row align-items-center">
+                            <div class="col-md-2">
+                                ${recentProduct.image_url 
+                                    ? `<img src="http://localhost:5000${recentProduct.image_url}" class="img-fluid rounded" alt="${recentProduct.name}">`
+                                    : `<div class="no-image-placeholder"><i class="fas fa-image fa-2x text-muted"></i></div>`}
+                            </div>
+                            <div class="col-md-10">
+                                <h5>${recentProduct.name}</h5>
+                                <p class="text-muted mb-1">SKU: ${recentProduct.sku || 'N/A'}</p>
+                                <p class="text-muted mb-1">Category: ${recentProduct.category || 'N/A'}</p>
+                                <div class="d-flex gap-3">
+                                    <span class="badge bg-success">Stock: ${recentProduct.stock || 0}</span>
+                                    <span class="badge bg-info">${recentProduct.status ? 'Active' : 'Inactive'}</span>
+                                    <span class="fw-bold text-primary">$${parseFloat(recentProduct.price).toFixed(2)}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            } else {
+                recentDiv.innerHTML = '<p class="text-muted">No products available</p>';
+            }
+
+            document.getElementById('lastUpdated').textContent = new Date().toLocaleTimeString();
+        }
+
+        // ✅ Refresh button
+        document.getElementById('refreshDashboard').addEventListener('click', updateDashboard);
+
+        // ✅ Initialize
         document.addEventListener('DOMContentLoaded', () => {
             updateDashboard();
+            refreshInterval = setInterval(updateDashboard, 30000);
         });
+
+        window.addEventListener('beforeunload', () => clearInterval(refreshInterval));
     </script>
 </body>
 </html>

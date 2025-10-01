@@ -159,11 +159,6 @@ app.get('/api/products/:id', async (req, res) => {
 // Dashboard endpoints
 app.get('/api/dashboard/stats', authenticateAdmin, async (req, res) => {
     try {
-        // Get total orders
-        const ordersResult = await pool.query(
-            'SELECT COUNT(*) as count, COALESCE(SUM(total_amount), 0) as total FROM orders'
-        );
-
         // Get total users
         const usersResult = await pool.query('SELECT COUNT(*) as count FROM users');
 
@@ -171,8 +166,6 @@ app.get('/api/dashboard/stats', authenticateAdmin, async (req, res) => {
         const productsResult = await pool.query('SELECT COUNT(*) as count FROM products');
 
         res.json({
-            totalOrders: parseInt(ordersResult.rows[0].count) || 0,
-            totalRevenue: parseFloat(ordersResult.rows[0].total) || 0,
             totalUsers: parseInt(usersResult.rows[0].count) || 0,
             totalProducts: parseInt(productsResult.rows[0].count) || 0
         });
