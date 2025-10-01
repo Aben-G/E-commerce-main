@@ -183,9 +183,12 @@
             const productsCount = document.getElementById('productsCount');
             const sortSelect = document.getElementById('sort');
             const searchInput = document.getElementById('searchInput');
+            const categoryButtons = document.querySelectorAll('.category-btn');
 
             let allProducts = [];
             let filteredProducts = [];
+            let activeCategory = 'all';
+            let searchTerm = '';
 
             // Initialize the products page
             async function initializeProductsPage() {
@@ -208,6 +211,9 @@
                         });
                     }
 
+                    // Setup category filter buttons
+                    setupCategoryFilters();
+
                     // Setup sort functionality
                     if (sortSelect) {
                         sortSelect.addEventListener('change', applySort);
@@ -225,13 +231,38 @@
                 return await res.json();
             }
 
-            function handleSearch() {
-                const searchTerm = searchInput.value.toLowerCase().trim();
+            function setupCategoryFilters() {
+                categoryButtons.forEach(button => {
+                    button.addEventListener('click', function() {
+                        // Remove active class from all buttons
+                        categoryButtons.forEach(btn => btn.classList.remove('active'));
+                        // Add active class to clicked button
+                        this.classList.add('active');
 
+                        // Update active category
+                        activeCategory = this.dataset.category;
+                        handleSearch(); // Re-apply search with new category
+                    });
+                });
+            }
+
+            function handleSearch() {
+                searchTerm = searchInput?.value.toLowerCase().trim() || '';
+
+                // Apply category filter first
+                let categoryFilteredProducts = allProducts;
+                if (activeCategory !== 'all') {
+                    categoryFilteredProducts = allProducts.filter(product => {
+                        const category = product.category?.toLowerCase() || '';
+                        return getCategoryMatch(category, activeCategory);
+                    });
+                }
+
+                // Apply search filter
                 if (!searchTerm) {
-                    filteredProducts = [...allProducts];
+                    filteredProducts = categoryFilteredProducts;
                 } else {
-                    filteredProducts = allProducts.filter(product => {
+                    filteredProducts = categoryFilteredProducts.filter(product => {
                         const name = product.name?.toLowerCase() || '';
                         const description = product.description?.toLowerCase() || '';
                         const brand = product.brand?.toLowerCase() || '';
@@ -246,6 +277,39 @@
 
                 // Apply current sort to filtered results
                 applySort();
+            }
+
+            function getCategoryMatch(productCategory, filterCategory) {
+                switch (filterCategory) {
+                    case 'smartphones':
+                        return productCategory.includes('smartphone') || productCategory.includes('phone');
+                    case 'laptops':
+                        return productCategory.includes('laptop');
+                    case 'tablets':
+                        return productCategory.includes('tablet');
+                    case 'audio':
+                        return productCategory.includes('headphone') ||
+                               productCategory.includes('audio') ||
+                               productCategory.includes('speaker') ||
+                               productCategory.includes('earbuds');
+                    case 'wearables':
+                        return productCategory.includes('watch') ||
+                               productCategory.includes('wearable') ||
+                               productCategory.includes('smartwatch') ||
+                               productCategory.includes('fitness');
+                    case 'accessories':
+                        return productCategory.includes('accessory') ||
+                               productCategory.includes('case') ||
+                               productCategory.includes('charger') ||
+                               productCategory.includes('cable') ||
+                               (!productCategory.includes('smartphone') &&
+                                !productCategory.includes('laptop') &&
+                                !productCategory.includes('tablet') &&
+                                !productCategory.includes('audio') &&
+                                !productCategory.includes('wearable'));
+                    default:
+                        return true;
+                }
             }
 
             function applySort() {
@@ -285,15 +349,24 @@
             }
 
             function renderNoProducts() {
-                if (searchInput && searchInput.value.trim()) {
+                if (searchTerm || activeCategory !== 'all') {
+                    let message = 'No products found';
+                    if (searchTerm && activeCategory !== 'all') {
+                        message = `No ${activeCategory} found matching "${searchTerm}"`;
+                    } else if (searchTerm) {
+                        message = `No products match your search for "${searchTerm}"`;
+                    } else if (activeCategory !== 'all') {
+                        message = `No products found in ${activeCategory} category`;
+                    }
+
                     productsGrid.innerHTML = `
                         <div class="no-products">
                             <div class="no-products-icon">
                                 <i class="fas fa-search"></i>
                             </div>
                             <h3>No Products Found</h3>
-                            <p>No products match your search for "${searchInput.value}". Try different keywords.</p>
-                            <button class="btn btn-outline" onclick="clearSearch()">Clear Search</button>
+                            <p>${message}. Try different keywords or category.</p>
+                            <button class="btn btn-outline" onclick="clearAllFilters()">Clear All Filters</button>
                         </div>
                     `;
                     productsCount.textContent = 'No products found';
@@ -350,12 +423,18 @@
                 return stars;
             }
 
-            // Global function to clear search
-            window.clearSearch = function() {
+            // Global function to clear all filters
+            window.clearAllFilters = function() {
                 if (searchInput) {
                     searchInput.value = '';
-                    handleSearch();
                 }
+                // Reset category to 'all'
+                categoryButtons.forEach(btn => btn.classList.remove('active'));
+                document.querySelector('[data-category="all"]').classList.add('active');
+                activeCategory = 'all';
+                searchTerm = '';
+                filteredProducts = [...allProducts];
+                applySort();
             };
 
             // Initialize the page
@@ -455,74 +534,78 @@
             color: #60a5fa;
         }
 
-        /* Search functionality styles */
-        .search-container {
-            position: relative;
-            flex: 1;
-            max-width: 400px;
-            margin: 0 1rem;
+        /* Category filter buttons styling */
+        .category-filters {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.75rem;
+            margin: 1.5rem 0;
+            padding-bottom: 1.5rem;
+            border-bottom: 1px solid var(--border-color);
         }
 
-        .search-input {
-            width: 100%;
-            padding: 0.75rem 3rem 0.75rem 1rem;
-            border: 1px solid #d1d5db;
-            border-radius: 0.5rem;
-            font-size: 0.875rem;
-            color: var(--text-color);
+        .category-btn {
+            padding: 0.5rem 1rem;
+            border: 1px solid var(--border-color);
             background-color: var(--card-bg);
+            color: var(--text-color);
+            border-radius: var(--radius);
+            font-size: 0.875rem;
+            font-weight: 500;
+            cursor: pointer;
             transition: var(--transition);
+            white-space: nowrap;
         }
 
-        .search-input:focus {
-            outline: none;
+        .category-btn:hover {
+            background-color: var(--primary-color);
+            color: white;
             border-color: var(--primary-color);
-            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+            transform: translateY(-1px);
         }
 
-        .search-input::placeholder {
-            color: var(--light-text);
+        .category-btn.active {
+            background-color: var(--primary-color);
+            color: white;
+            border-color: var(--primary-color);
         }
 
-        .search-icon {
-            position: absolute;
-            right: 1rem;
-            top: 50%;
-            transform: translateY(-50%);
-            color: var(--light-text);
-            pointer-events: none;
+        .category-btn i {
+            margin-right: 0.5rem;
         }
 
-        /* Dark theme adjustments for search */
-        body.dark-theme .search-input {
+        /* Dark theme adjustments for category filters */
+        body.dark-theme .category-filters {
+            border-bottom-color: #374151;
+        }
+
+        body.dark-theme .category-btn {
             background-color: #374151;
             border-color: #4b5563;
             color: #e5e7eb;
         }
 
-        body.dark-theme .search-input:focus {
+        body.dark-theme .category-btn:hover {
+            background-color: #60a5fa;
             border-color: #60a5fa;
-            box-shadow: 0 0 0 3px rgba(96, 165, 250, 0.1);
         }
 
-        body.dark-theme .search-input::placeholder {
-            color: #9ca3af;
+        body.dark-theme .category-btn.active {
+            background-color: #60a5fa;
+            border-color: #60a5fa;
         }
 
-        body.dark-theme .search-icon {
-            color: #9ca3af;
-        }
-
-        /* Responsive adjustments for search */
+        /* Responsive adjustments for category filters */
         @media (max-width: 768px) {
-            .search-container {
-                order: 2;
+            .category-filters {
+                justify-content: center;
                 margin: 1rem 0;
-                max-width: none;
+                padding-bottom: 1rem;
             }
 
-            .products-toolbar {
-                flex-wrap: wrap;
+            .category-btn {
+                padding: 0.4rem 0.8rem;
+                font-size: 0.8rem;
             }
         }
     </style>
