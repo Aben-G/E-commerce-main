@@ -24,13 +24,13 @@ document.addEventListener('DOMContentLoaded', function () {
     if (loginForm) {
         loginForm.addEventListener('submit', async function (e) {
             e.preventDefault();
-            const email = document.getElementById('email').value;
+            const username = document.getElementById('username').value;
             const password = document.getElementById('password').value;
             try {
                 const res = await fetch('http://localhost:5000/api/login', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ username: email, password })
+                    body: JSON.stringify({ username: username, password })
                 });
                 const data = await res.json();
                 if (res.ok && data.token) {
@@ -52,7 +52,7 @@ document.addEventListener('DOMContentLoaded', function () {
     if (registerForm) {
         registerForm.addEventListener('submit', async function (e) {
             e.preventDefault();
-            const email = document.getElementById('email').value;
+            const username = document.getElementById('username').value;
             const password = document.getElementById('password').value;
             const confirmPassword = document.getElementById('confirmPassword').value;
             if (password !== confirmPassword) {
@@ -63,7 +63,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 const res = await fetch('http://localhost:5000/api/register', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ username: email, password })
+                    body: JSON.stringify({ username: username, password })
                 });
                 const data = await res.json();
                 if (res.ok && data.id) {

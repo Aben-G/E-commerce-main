@@ -33,6 +33,17 @@
             background-color: rgba(78, 115, 223, 0.1);
             color: #4e73df;
         }
+
+        /* Make main content area follow theme */
+        .admin-main {
+            background-color: var(--bg-color);
+            transition: background-color 0.3s ease;
+        }
+        
+        /* Dark theme adjustments */
+        body.dark-theme .admin-main {
+            background-color: var(--dark-bg-color);
+        }
     </style>
 </head>
 

@@ -333,7 +333,7 @@ app.delete('/api/users/:id', authenticateAdmin, async (req, res) => {
     const { id } = req.params;
     if (parseInt(id) === req.user.id) return res.status(400).json({ error: 'Cannot delete your own account' });
     try {
-        const result = await pool.query('DELETE FROM users WHERE id=$1 RETURNING id, username, email', [parseInt(id)]);
+        const result = await pool.query('DELETE FROM users WHERE id=$1 RETURNING id, username', [parseInt(id)]);
         if (result.rows.length === 0) return res.status(404).json({ error: 'User not found' });
         res.json({ message: 'User deleted successfully', user: result.rows[0] });
     } catch (err) {

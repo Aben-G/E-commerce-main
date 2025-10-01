@@ -70,7 +70,7 @@
                     <h1>Products</h1>
                 </div>
                 <div class="header-right">
-
+                   
                     <button id="theme-toggle" class="theme-toggle-btn" aria-label="Toggle Theme">
                         <i class="fas fa-moon"></i>
                     </button>
@@ -358,8 +358,8 @@
             return await res.json();
         }
 
-        async function renderProducts() {
-            const products = await fetchProducts();
+        async function renderProducts(productsToRender = null) {
+            const products = productsToRender || await fetchProducts();
             const tableBody = document.getElementById('productsTableBody');
             tableBody.innerHTML = '';
 
@@ -417,10 +417,27 @@
             const addProductForm = document.querySelector('#addProductModal form');
             const addProductModal = new bootstrap.Modal(document.getElementById('addProductModal'));
             const deleteProductModal = new bootstrap.Modal(document.getElementById('deleteProductModal'));
-            let productIdToDelete = null;
+            const productSearch = document.getElementById('productSearch');
+            let allProducts = [];
 
             // Initial render
             renderProducts();
+
+            // Search functionality
+            productSearch.addEventListener('input', async (e) => {
+                const searchTerm = e.target.value.toLowerCase();
+                if (!allProducts.length) {
+                    allProducts = await fetchProducts();
+                }
+                const filteredProducts = allProducts.filter(product => 
+                    product.name.toLowerCase().includes(searchTerm) ||
+                    (product.description && product.description.toLowerCase().includes(searchTerm)) ||
+                    (product.category && product.category.toLowerCase().includes(searchTerm)) ||
+                    (product.sku && product.sku.toLowerCase().includes(searchTerm))
+                );
+                renderProducts(filteredProducts);
+            });
+            let productIdToDelete = null;
 
             // Handle Add Product form submission
             addProductForm.addEventListener('submit', async (event) => {
@@ -512,6 +529,8 @@
                     alert('Failed to add product: ' + (err.error || res.statusText));
                     return;
                 }
+                // Refresh all products and update search
+                allProducts = await fetchProducts();
                 await renderProducts();
                 addProductModal.hide();
                 addProductForm.reset();
@@ -628,6 +647,8 @@
                         return;
                     }
 
+                    // Refresh all products and update search
+                    allProducts = await fetchProducts();
                     await renderProducts();
                     const editModal = bootstrap.Modal.getInstance(document.getElementById('editProductModal'));
                     editModal.hide();
@@ -678,6 +699,8 @@
                     const result = await res.json();
                     console.log('Delete successful:', result);
 
+                    // Refresh all products and update search
+                    allProducts = await fetchProducts();
                     await renderProducts();
                     const deleteModal = bootstrap.Modal.getInstance(document.getElementById('deleteProductModal'));
                     deleteModal.hide();
