@@ -92,15 +92,6 @@ INSERT INTO users (username, password, is_admin)
 VALUES ('admin', '$2b$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', true)
 ON CONFLICT (username) DO NOTHING;
 
--- Insert sample products
-INSERT INTO products (name, description, price, category, sku, stock, status) VALUES
-('iPhone 15 Pro', 'Latest Apple iPhone with advanced camera system and A17 Pro chip', 999.99, 'smartphones', 'IPH15PRO001', 25, true),
-('MacBook Air M2', 'Lightweight laptop with M2 chip, perfect for productivity and creativity', 1199.99, 'laptops', 'MBA-M2-001', 15, true),
-('iPad Pro 12.9"', 'Professional tablet with M2 chip and Liquid Retina XDR display', 1099.99, 'tablets', 'IPADPRO129', 20, true),
-('AirPods Pro 2nd Gen', 'Premium wireless earbuds with active noise cancellation', 249.99, 'audio', 'APP2GEN001', 50, true),
-('Apple Watch Series 9', 'Advanced smartwatch with health monitoring and fitness tracking', 399.99, 'wearables', 'AWS9-001', 30, true),
-('Magic Keyboard', 'Wireless keyboard with scissor mechanism and numeric keypad', 179.99, 'accessories', 'MKB-001', 40, true)
-ON CONFLICT (sku) DO NOTHING;
 
 -- Create indexes for better performance
 CREATE INDEX IF NOT EXISTS idx_products_category ON products(category);

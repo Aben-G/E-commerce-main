@@ -86,7 +86,7 @@
                             <span id="cartTotal">$0.00</span>
                         </div>
                         
-                        <button class="checkout-btn">Proceed to Checkout</button>
+                        <button class="checkout-btn">Confirm Order</button>
                         
                         <div class="coupon-form">
                             <input type="text" class="coupon-input" placeholder="Coupon code">
@@ -113,8 +113,37 @@
                     </a>
                 </div>
             </div>
-        </div>
-    </main>
+            
+            <!-- Order Success Modal -->
+            <div id="orderSuccessModal" class="order-success-modal" style="display: none;">
+                <div class="order-success-content">
+                    <div class="success-animation">
+                        <div class="success-icon">
+                            <i class="fas fa-check"></i>
+                        </div>
+                        <div class="success-text">
+                            <h2>Order Confirmed!</h2>
+                            <p>Thank you for your order. Your items will be processed and shipped soon.</p>
+                        </div>
+                    </div>
+                    <div class="order-summary-modal">
+                        <h3>Order Summary</h3>
+                        <div class="order-items-modal" id="orderItemsModal">
+                            <!-- Order items will be populated here -->
+                        </div>
+                        <div class="order-totals-modal">
+                            <div class="total-row-modal">
+                                <span>Total</span>
+                                <span id="orderTotalModal">$0.00</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="success-actions">
+                        <a href="products.html" class="btn btn-primary">Continue Shopping</a>
+                        <a href="order-tracking.html" class="btn btn-outline">Track Order</a>
+                    </div>
+                </div>
+            </div>
 
     <!-- Newsletter -->
     <section class="newsletter">
@@ -165,8 +194,8 @@
                     <h4>Contact Info</h4>
                     <ul class="contact-info">
 {{ ... }}
-                        <li><i class="fas fa-map-marker-alt"></i> 123 Tech Street, Silicon Valley, CA 94025</li>
-                        <li><i class="fas fa-phone"></i> +1 (555) 123-4567</li>
+                        <li><i class="fas fa-map-marker-alt"></i> 4 Killo, Addis Ababa, Ethiopia 94025</li>
+                        <li><i class="fas fa-phone"></i> +251 987 7612</li>
                         <li><i class="fas fa-envelope"></i> info@OnLiNE ELECTRONICS.com</li>
                     </ul>
                 </div>
@@ -303,13 +332,60 @@
                 });
             }
             
-            // Checkout button
-            const checkoutBtn = document.querySelector('.checkout-btn');
-            if (checkoutBtn) {
-                checkoutBtn.addEventListener('click', function() {
-                    // In a real app, you would redirect to the checkout page
-                    window.location.href = 'checkout.html';
+            // Confirm Order button
+            const confirmOrderBtn = document.querySelector('.checkout-btn');
+            if (confirmOrderBtn) {
+                confirmOrderBtn.addEventListener('click', function() {
+                    // Get cart items and total
+                    const cart = JSON.parse(localStorage.getItem('cart')) || [];
+                    if (cart.length === 0) {
+                        alert('Your cart is empty!');
+                        return;
+                    }
+
+                    // Generate order number
+                    const orderNumber = 'TECH-' + new Date().getFullYear() + '-' + Math.floor(Math.random() * 100000).toString().padStart(5, '0');
+
+                    // Populate order modal
+                    populateOrderModal(cart, orderNumber);
+
+                    // Show success modal
+                    document.getElementById('orderSuccessModal').style.display = 'flex';
+
+                    // Clear cart after successful order
+                    localStorage.removeItem('cart');
+                    loadCartItems(); // This will show empty cart
                 });
+            }
+
+            // Function to populate order modal with cart items
+            function populateOrderModal(cart, orderNumber) {
+                const orderItemsContainer = document.getElementById('orderItemsModal');
+                const orderTotalElement = document.getElementById('orderTotalModal');
+
+                // Calculate total
+                let total = 0;
+                const orderItemsHTML = cart.map(item => {
+                    const itemTotal = parseFloat(item.price) * item.quantity;
+                    total += itemTotal;
+
+                    return `
+                        <div class="order-item-modal">
+                            <img src="${item.image || 'https://via.placeholder.com/50x50?text=' + encodeURIComponent(item.name)}" alt="${item.name}">
+                            <div class="order-item-modal-details">
+                                <div class="order-item-modal-title">${item.name}</div>
+                                <div class="order-item-modal-variant">Quantity: ${item.quantity}</div>
+                                <div class="order-item-modal-price">$${itemTotal.toFixed(2)}</div>
+                            </div>
+                        </div>
+                    `;
+                }).join('');
+
+                orderItemsContainer.innerHTML = orderItemsHTML;
+                orderTotalElement.textContent = `$${total.toFixed(2)}`;
+
+                // Update order number in modal (you could add this element if needed)
+                // document.getElementById('orderNumberModal').textContent = orderNumber;
             }
             
             // Load cart items from localStorage
