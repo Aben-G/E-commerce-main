@@ -70,7 +70,9 @@
                     <h1>Products</h1>
                 </div>
                 <div class="header-right">
-                   
+                    <div class="search-container me-3">
+                        <input type="text" id="productSearch" class="form-control" placeholder="Search products...">
+                    </div>
                     <button id="theme-toggle" class="theme-toggle-btn" aria-label="Toggle Theme">
                         <i class="fas fa-moon"></i>
                     </button>
@@ -393,12 +395,12 @@
                     </td>
                 `;
 
-                // Set data attributes properly using DOM properties
+                // Set data attributes properly using DOM properties - ensure ID is stored as string for dataset
                 const editBtn = row.querySelector('.edit-btn');
                 const deleteBtn = row.querySelector('.delete-btn');
 
-                editBtn.dataset.id = product.id;
-                deleteBtn.dataset.id = product.id;
+                editBtn.dataset.id = product.id.toString();
+                deleteBtn.dataset.id = product.id.toString();
                 deleteBtn.dataset.name = product.name;
 
                 tableBody.appendChild(row);
@@ -581,7 +583,11 @@
                     return;
                 }
 
-                const productId = document.getElementById('editProductId').value;
+                const productId = parseInt(document.getElementById('editProductId').value);
+                if (isNaN(productId)) {
+                    alert('Invalid product ID');
+                    return;
+                }
                 const name = document.getElementById('editProductName').value;
                 const description = document.getElementById('editProductDescription').value;
                 const price = document.getElementById('editProductPrice').value;
@@ -631,12 +637,18 @@
                 };
 
                 const token = localStorage.getItem('adminToken');
+                if (!token) {
+                    alert('Authentication required. Please login again.');
+                    window.location.href = 'login.html';
+                    return;
+                }
+                
                 try {
                     const res = await fetch(`http://localhost:5000/api/products/${productId}`, {
                         method: 'PUT',
                         headers: {
                             'Content-Type': 'application/json',
-                            ...(token ? { 'Authorization': 'Bearer ' + token } : {})
+                            'Authorization': 'Bearer ' + token
                         },
                         body: JSON.stringify(updatedProduct)
                     });
@@ -662,15 +674,21 @@
 
             // Handle delete confirmation
             document.getElementById('confirmDelete').addEventListener('click', async () => {
-                const productId = document.getElementById('confirmDelete').dataset.productId;
+                const productId = parseInt(document.getElementById('confirmDelete').dataset.productId);
                 const token = localStorage.getItem('adminToken');
 
                 console.log('Confirm delete clicked. Product ID from dataset:', productId);
                 console.log('Product ID type:', typeof productId);
                 console.log('Token exists:', !!token);
 
-                if (!productId) {
-                    alert('Error: Product ID is missing');
+                if (!productId || isNaN(productId)) {
+                    alert('Error: Invalid or missing product ID');
+                    return;
+                }
+                
+                if (!token) {
+                    alert('Authentication required. Please login again.');
+                    window.location.href = 'login.html';
                     return;
                 }
 
@@ -682,7 +700,7 @@
                         method: 'DELETE',
                         headers: {
                             'Content-Type': 'application/json',
-                            ...(token ? { 'Authorization': 'Bearer ' + token } : {})
+                            'Authorization': 'Bearer ' + token
                         }
                     });
 
@@ -727,12 +745,24 @@
         // Function to open edit modal with product data
         async function openEditModal(productId) {
             console.log('Opening edit modal for product ID:', productId);
+            const numericProductId = parseInt(productId);
+            if (isNaN(numericProductId)) {
+                alert('Invalid product ID');
+                return;
+            }
+            
             try {
                 const token = localStorage.getItem('adminToken');
-                const res = await fetch(`http://localhost:5000/api/products/${productId}`, {
+                if (!token) {
+                    alert('Authentication required. Please login again.');
+                    window.location.href = 'login.html';
+                    return;
+                }
+                
+                const res = await fetch(`http://localhost:5000/api/products/${numericProductId}`, {
                     headers: {
                         'Content-Type': 'application/json',
-                        ...(token ? { 'Authorization': 'Bearer ' + token } : {})
+                        'Authorization': 'Bearer ' + token
                     }
                 });
 
@@ -749,7 +779,7 @@
                 console.log('Product data received:', product);
 
                 // Populate form fields
-                document.getElementById('editProductId').value = product.id;
+                document.getElementById('editProductId').value = product.id.toString();
                 document.getElementById('editProductName').value = product.name || '';
                 document.getElementById('editProductSku').value = product.sku || '';
                 document.getElementById('editProductCategory').value = product.category || '';
@@ -776,8 +806,14 @@
         // Function to open delete modal
         function openDeleteModal(productId, productName) {
             console.log('Opening delete modal with ID:', productId, 'Name:', productName);
+            const numericProductId = parseInt(productId);
+            if (isNaN(numericProductId)) {
+                alert('Invalid product ID');
+                return;
+            }
+            
             document.getElementById('productToDelete').textContent = productName;
-            document.getElementById('confirmDelete').dataset.productId = productId;
+            document.getElementById('confirmDelete').dataset.productId = numericProductId.toString();
 
             // Verify the ID was set
             console.log('Confirm button dataset.productId:', document.getElementById('confirmDelete').dataset.productId);
