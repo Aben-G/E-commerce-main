@@ -52,16 +52,16 @@ const fetchDashboardData = async () => {
 
         // Update stats
         updateStats(stats);
-        
+
         // Update top products with real data
         updateTopProducts(products);
-        
+
         // Update chart with real data
         await updateSalesChart();
-        
+
         // Update last updated time
         updateLastUpdated();
-        
+
     } catch (error) {
         console.error('Error fetching dashboard data:', error);
         showError('Failed to load dashboard data. Please try again.');
@@ -71,7 +71,7 @@ const fetchDashboardData = async () => {
 // Update stats cards
 const updateStats = (stats) => {
     if (!stats) return;
-    
+
     elements.totalRevenue.textContent = formatCurrency(stats.totalRevenue || 0);
     elements.totalUsers.textContent = stats.totalUsers || 0;
     elements.totalProducts.textContent = stats.totalProducts || 0;
@@ -83,7 +83,7 @@ const updateTopProducts = (products) => {
         elements.topProducts.innerHTML = '<div class="no-data">No products found</div>';
         return;
     }
-    
+
     const items = products.map((product, index) => `
         <div class="product-item">
             <span class="rank">${index + 1}</span>
@@ -100,7 +100,7 @@ const updateTopProducts = (products) => {
             </div>
         </div>
     `).join('');
-    
+
     elements.topProducts.innerHTML = items;
 };
 
@@ -109,19 +109,19 @@ const updateSalesChart = async () => {
     try {
         const response = await fetch(`${API_BASE_URL}/sales?days=${currentPeriod}`);
         const data = await response.json();
-        
+
         if (!data.labels || !data.data) {
             console.error('Invalid chart data format:', data);
             return;
         }
-        
+
         const ctx = elements.salesChart.getContext('2d');
-        
+
         // Destroy previous chart if it exists
         if (salesChart) {
             salesChart.destroy();
         }
-        
+
         // Create new chart
         salesChart = new Chart(ctx, {
             type: 'line',
@@ -148,7 +148,7 @@ const updateSalesChart = async () => {
                         mode: 'index',
                         intersect: false,
                         callbacks: {
-                            label: function(context) {
+                            label: function (context) {
                                 return `$${context.raw.toLocaleString()}`;
                             }
                         }
@@ -158,7 +158,7 @@ const updateSalesChart = async () => {
                     y: {
                         beginAtZero: true,
                         ticks: {
-                            callback: function(value) {
+                            callback: function (value) {
                                 return '$' + value.toLocaleString();
                             }
                         }
@@ -176,11 +176,11 @@ const showError = (message) => {
     const errorDiv = document.createElement('div');
     errorDiv.className = 'alert alert-error';
     errorDiv.textContent = message;
-    
+
     // Insert at the top of the dashboard content
     const dashboardContent = document.querySelector('.dashboard-content');
     dashboardContent.insertBefore(errorDiv, dashboardContent.firstChild);
-    
+
     // Remove after 5 seconds
     setTimeout(() => {
         errorDiv.remove();
@@ -191,12 +191,12 @@ const showError = (message) => {
 const initDashboard = () => {
     // Initial data load
     fetchDashboardData();
-    
+
     // Set up refresh button
     if (elements.refreshBtn) {
         elements.refreshBtn.addEventListener('click', fetchDashboardData);
     }
-    
+
     // Set up period selector
     if (elements.salesPeriod) {
         elements.salesPeriod.addEventListener('change', (e) => {
@@ -204,55 +204,55 @@ const initDashboard = () => {
             updateSalesChart();
         });
     }
-    
+
     // Set up auto-refresh every 5 minutes
     setInterval(fetchDashboardData, 5 * 60 * 1000);
 };
 
 // Initialize when DOM is loaded
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
     // Mobile menu toggle
     const menuToggle = document.querySelector('.menu-toggle');
     const sidebar = document.querySelector('.admin-sidebar');
-    
+
     if (menuToggle && sidebar) {
-        menuToggle.addEventListener('click', function() {
+        menuToggle.addEventListener('click', function () {
             sidebar.classList.toggle('active');
         });
     }
-    
+
     // Close sidebar when clicking outside
-    document.addEventListener('click', function(event) {
-        if (window.innerWidth <= 992 && 
-            !event.target.closest('.admin-sidebar') && 
+    document.addEventListener('click', function (event) {
+        if (window.innerWidth <= 992 &&
+            !event.target.closest('.admin-sidebar') &&
             !event.target.closest('.menu-toggle')) {
             sidebar.classList.remove('active');
         }
     });
-    
+
     // Handle active navigation items
     const navLinks = document.querySelectorAll('.admin-nav a');
-    
+
     navLinks.forEach(link => {
-        link.addEventListener('click', function() {
+        link.addEventListener('click', function () {
             // Remove active class from all links
             navLinks.forEach(navLink => {
                 navLink.parentElement.classList.remove('active');
             });
-            
+
             // Add active class to clicked link
             this.parentElement.classList.add('active');
-            
+
             // Close sidebar on mobile after clicking a link
             if (window.innerWidth <= 992) {
                 sidebar.classList.remove('active');
             }
         });
     });
-    
+
     // Set active link based on current page
     const currentPage = window.location.pathname.split('/').pop() || 'index.html';
-    
+
     navLinks.forEach(link => {
         const linkHref = link.getAttribute('href');
         if (linkHref === currentPage) {
@@ -261,51 +261,51 @@ document.addEventListener('DOMContentLoaded', function() {
             link.parentElement.classList.remove('active');
         }
     });
-    
+
     // Handle dropdown menus
     const dropdownToggles = document.querySelectorAll('.has-dropdown > a');
-    
+
     dropdownToggles.forEach(toggle => {
-        toggle.addEventListener('click', function(e) {
+        toggle.addEventListener('click', function (e) {
             e.preventDefault();
             const dropdown = this.nextElementSibling;
-            
+
             // Close all other dropdowns
             document.querySelectorAll('.dropdown-menu').forEach(menu => {
                 if (menu !== dropdown) {
                     menu.classList.remove('show');
                 }
             });
-            
+
             // Toggle current dropdown
             if (dropdown) {
                 dropdown.classList.toggle('show');
             }
         });
     });
-    
+
     // Close dropdowns when clicking outside
-    document.addEventListener('click', function(e) {
+    document.addEventListener('click', function (e) {
         if (!e.target.matches('.has-dropdown > a')) {
             document.querySelectorAll('.dropdown-menu').forEach(dropdown => {
                 dropdown.classList.remove('show');
             });
         }
     });
-    
+
     // Initialize charts (placeholder - would use Chart.js in a real application)
     function initCharts() {
         // This is a placeholder for chart initialization
         // In a real application, you would use a library like Chart.js
         console.log('Charts would be initialized here');
     }
-    
+
     // Initialize date picker (placeholder)
     function initDatePicker() {
         // This is a placeholder for date picker initialization
         console.log('Date picker would be initialized here');
     }
-    
+
     // Initialize tooltips
     function initTooltips() {
         const tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
@@ -313,88 +313,88 @@ document.addEventListener('DOMContentLoaded', function() {
             return new bootstrap.Tooltip(tooltipTriggerEl);
         });
     }
-    
+
     // Initialize all components
     function init() {
         initCharts();
         initDatePicker();
-        
+
         // Initialize Bootstrap tooltips if Bootstrap is available
         if (typeof bootstrap !== 'undefined' && bootstrap.Tooltip) {
             initTooltips();
         }
     }
-    
+
     // Run initialization when DOM is fully loaded
     if (document.readyState === 'loading') {
         document.addEventListener('DOMContentLoaded', init);
     } else {
         init();
     }
-    
+
     // Handle form submissions
     const forms = document.querySelectorAll('.needs-validation');
-    
+
     Array.from(forms).forEach(form => {
         form.addEventListener('submit', event => {
             if (!form.checkValidity()) {
                 event.preventDefault();
                 event.stopPropagation();
             }
-            
+
             form.classList.add('was-validated');
         }, false);
     });
-    
+
     // Handle file upload preview
     const fileInputs = document.querySelectorAll('.custom-file-input');
-    
+
     fileInputs.forEach(input => {
-        input.addEventListener('change', function() {
+        input.addEventListener('change', function () {
             const fileName = this.files[0] ? this.files[0].name : 'Choose file';
             const label = this.nextElementSibling;
-            
+
             if (label && label.classList.contains('custom-file-label')) {
                 label.textContent = fileName;
             }
-            
+
             // Show image preview if it's an image upload
             if (this.files && this.files[0] && this.files[0].type.match('image.*')) {
                 const preview = this.closest('.form-group').querySelector('.image-preview');
-                
+
                 if (preview) {
                     const reader = new FileReader();
-                    
-                    reader.onload = function(e) {
+
+                    reader.onload = function (e) {
                         preview.innerHTML = `<img src="${e.target.result}" class="img-fluid" alt="Preview">`;
                     }
-                    
+
                     reader.readAsDataURL(this.files[0]);
                 }
             }
         });
     });
-    
+
     // Handle confirmation dialogs
     const confirmButtons = document.querySelectorAll('[data-confirm]');
-    
+
     confirmButtons.forEach(button => {
-        button.addEventListener('click', function(e) {
+        button.addEventListener('click', function (e) {
             if (!confirm(this.getAttribute('data-confirm'))) {
                 e.preventDefault();
             }
         });
     });
-    
+
     // Handle tab navigation with URL hash
     if (window.location.hash) {
         const tabTrigger = new bootstrap.Tab(document.querySelector(`[href="${window.location.hash}"]`));
         tabTrigger.show();
     }
-    
+
     // Update URL hash when tab is shown
     const tabEls = document.querySelectorAll('button[data-bs-toggle="tab"]');
-    
+
     tabEls.forEach(tabEl => {
         tabEl.addEventListener('shown.bs.tab', function (e) {
             window.location.hash = e.target.getAttribute('href');
