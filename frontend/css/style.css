@@ -288,9 +288,6 @@ button {
     margin: 0;
 }
 
-/* Remove unused category-info styles since we're using icons now */
-
-/* No products message */
 .no-products {
     text-align: center;
     padding: 3rem 1rem;
@@ -303,22 +300,22 @@ button {
     margin: 0;
 }
 
-/* Featured Products Carousel */
+
 .carousel-container {
     position: relative;
     width: 100%;
-    max-width: 1200px; /* Increased width */
+    max-width: 1200px; 
     margin: 0 auto;
     border-radius: var(--radius-lg);
     overflow: hidden;
     box-shadow: 0 20px 60px rgba(0, 0, 0, 0.1);
-    background: #f8fafc; /* Fallback background */
+    background: #f8fafc;
 }
 
 .carousel-wrapper {
     position: relative;
     width: 100%;
-    height: 400px; /* Reduced height from 500px */
+    height: 400px; 
     overflow: hidden;
     background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
 }

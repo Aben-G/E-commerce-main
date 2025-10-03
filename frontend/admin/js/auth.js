@@ -1,4 +1,4 @@
-// Handle logout functionality
+
 function handleLogout() {
     const isConfirmed = confirm('Are you sure you want to log out?');
     if (isConfirmed) {
@@ -13,7 +13,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const registerForm = document.getElementById('registerForm');
     const logoutButton = document.getElementById('logoutButton');
 
-    // Add click event for logout button if it exists
+    
     if (logoutButton) {
         logoutButton.addEventListener('click', function (e) {
             e.preventDefault();
@@ -35,7 +35,6 @@ document.addEventListener('DOMContentLoaded', function () {
                 const data = await res.json();
                 if (res.ok && data.token) {
                     localStorage.setItem('adminToken', data.token);
-                    // Also set session flag for legacy frontend checks
                     sessionStorage.setItem('isAdminLoggedIn', 'true');
                     setTimeout(function () {
                         window.location.href = 'index.html';
