@@ -588,13 +588,15 @@
                     <td>${user.id || 'N/A'}</td>
                     <td>${user.username || 'N/A'}</td>
                     <td>${user.is_admin ? 'Yes' : 'No'}</td>
-                    <td class="text-end">
-                        <button class="btn btn-sm btn-outline-primary edit-btn me-1" data-id="${user.id}" title="Edit">
-                            <i class="fas fa-edit"></i>
-                        </button>
-                        <button class="btn btn-sm btn-outline-danger delete-btn" data-id="${user.id}" data-name="${user.username}" title="Delete">
-                            <i class="fas fa-trash"></i>
-                        </button>
+                    <td class="text-nowrap">
+                        <div class="d-flex gap-1 justify-content-end">
+                            <button class="btn btn-sm btn-outline-primary edit-btn" data-id="${user.id}" title="Edit">
+                                <i class="fas fa-edit"></i>
+                            </button>
+                            <button class="btn btn-sm btn-outline-danger delete-btn" data-id="${user.id}" data-name="${user.username}" title="Delete">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </div>
                     </td>
                 `;
                 tableBody.appendChild(row);
