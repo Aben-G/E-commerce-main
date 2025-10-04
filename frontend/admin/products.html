@@ -479,7 +479,24 @@
                 order: [[1, 'asc']],
                 columnDefs: [
                     { orderable: false, targets: [0, 6] }
-                ]
+                ],
+                drawCallback: function() {
+                  
+                    document.querySelectorAll('.edit-btn').forEach(btn => {
+                        btn.addEventListener('click', async function() {
+                            const productId = this.dataset.id;
+                            await openEditModal(productId);
+                        });
+                    });
+
+                    document.querySelectorAll('.delete-btn').forEach(btn => {
+                        btn.addEventListener('click', function() {
+                            const productId = this.dataset.id;
+                            const productName = this.dataset.name;
+                            openDeleteModal(productId, productName);
+                        });
+                    });
+                }
             });
         }
 
@@ -494,21 +511,32 @@
 
         // Add event listeners for product buttons
         function addProductButtonEventListeners() {
-            // Edit button click handler
-            document.querySelectorAll('.edit-btn').forEach(btn => {
-                btn.addEventListener('click', async function () {
-                    const productId = this.dataset.id;
-                    await openEditModal(productId);
-                });
-            });
+            // Using event delegation for dynamically added elements
+            document.addEventListener('click', async function(event) {
+                // Check if the clicked element or its parent has the edit-btn class
+                const editBtn = event.target.closest('.edit-btn');
+                if (editBtn) {
+                    event.preventDefault();
+                    const productId = editBtn.dataset.id;
+                    console.log('Edit button clicked. Product ID:', productId);
+                    if (productId) {
+                        await openEditModal(productId);
+                    }
+                    return;
+                }
 
-            // Delete button click handler
-            document.querySelectorAll('.delete-btn').forEach(btn => {
-                btn.addEventListener('click', function () {
-                    const productId = this.dataset.id;
-                    const productName = this.dataset.name;
-                    openDeleteModal(productId, productName);
-                });
+                // Check if the clicked element or its parent has the delete-btn class
+                const deleteBtn = event.target.closest('.delete-btn');
+                if (deleteBtn) {
+                    event.preventDefault();
+                    const productId = deleteBtn.dataset.id;
+                    const productName = deleteBtn.dataset.name;
+                    console.log('Delete button clicked. Product ID:', productId);
+                    if (productId && productName) {
+                        openDeleteModal(productId, productName);
+                    }
+                    return;
+                }
             });
         }
 

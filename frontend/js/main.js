@@ -409,30 +409,27 @@ function updateCartCount() {
     cartCount.style.display = totalItems > 0 ? 'flex' : 'none';
 }
 
-// Show notification
+
 function showNotification(message, type = 'success') {
-    // In a real app, you'd use a more sophisticated notification system
     alert(message);
 }
 
-// Carousel variables
+
 let currentSlide = 0;
 let totalSlides = 0;
 let autoPlayInterval = null;
 let isTransitioning = false;
 
-// Carousel elements (to be set in loadFeaturedProducts)
+
 let carouselTrack, carouselIndicators, carouselPrev, carouselNext;
 
-// Initialize carousel
+
 function initializeCarousel(slideCount) {
     totalSlides = slideCount;
     currentSlide = 0;
-
-    // Set initial state
     updateCarousel();
 
-    // Pause auto-play on hover
+   
     const carouselContainer = document.querySelector('.carousel-container');
     if (carouselContainer) {
         carouselContainer.addEventListener('mouseenter', stopAutoPlay);
@@ -440,7 +437,7 @@ function initializeCarousel(slideCount) {
     }
 }
 
-// Update carousel display
+
 function updateCarousel() {
     if (!carouselTrack) {
         console.log('Carousel track not found');
@@ -457,7 +454,7 @@ function updateCarousel() {
         indicatorsFound: indicators.length
     });
 
-    // Update slides
+   
     slides.forEach((slide, index) => {
         if (index === currentSlide) {
             slide.classList.add('active');
@@ -480,13 +477,13 @@ function updateCarousel() {
         }
     });
 
-    // Update indicators
+  
     indicators.forEach((indicator, index) => {
         indicator.classList.toggle('active', index === currentSlide);
     });
 }
 
-// Go to specific slide
+
 function goToSlide(slideIndex) {
     if (isTransitioning || slideIndex === currentSlide) return;
 
@@ -499,7 +496,7 @@ function goToSlide(slideIndex) {
     }, 500);
 }
 
-// Next slide
+
 function nextSlide() {
     if (isTransitioning) return;
     currentSlide = (currentSlide + 1) % totalSlides;

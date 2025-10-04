@@ -1,11 +1,11 @@
-// Admin Dashboard JavaScript
-let salesChart = null;
-let currentPeriod = 30; // Default to 30 days
 
-// API Base URL
+let salesChart = null;
+let currentPeriod = 30; 
+
+
 const API_BASE_URL = '/api';
 
-// DOM Elements
+
 const elements = {
     totalRevenue: document.getElementById('totalRevenue'),
     totalUsers: document.getElementById('totalUsers'),
@@ -17,7 +17,7 @@ const elements = {
     lastUpdated: document.getElementById('lastUpdated')
 };
 
-// Format currency
+
 const formatCurrency = (amount) => {
     return new Intl.NumberFormat('en-US', {
         style: 'currency',

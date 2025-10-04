@@ -159,10 +159,9 @@ app.get('/api/products/:id', async (req, res) => {
 // Dashboard endpoints
 app.get('/api/dashboard/stats', authenticateAdmin, async (req, res) => {
     try {
-        // Get total users
+    
         const usersResult = await pool.query('SELECT COUNT(*) as count FROM users');
 
-        // Get total products
         const productsResult = await pool.query('SELECT COUNT(*) as count FROM products');
 
         res.json({
@@ -193,23 +192,23 @@ app.get('/api/dashboard/recent-product', authenticateAdmin, async (req, res) => 
     }
 });
 
-// Get sales data for charts
+
 app.get('/api/sales', authenticateAdmin, async (req, res) => {
     try {
         const days = parseInt(req.query.days) || 30;
         const salesData = [];
         const labels = [];
 
-        // Generate date range
+       
         const endDate = new Date();
         const startDate = new Date();
         startDate.setDate(endDate.getDate() - days);
 
-        // Format dates for query
+      
         const startDateStr = startDate.toISOString().split('T')[0];
         const endDateStr = endDate.toISOString().split('T')[0];
 
-        // Get sales data grouped by date
+   
         const result = await pool.query(
             `SELECT 
                 DATE(created_at) as date, 
@@ -221,13 +220,13 @@ app.get('/api/sales', authenticateAdmin, async (req, res) => {
             [startDateStr, endDateStr]
         );
 
-        // Create a map of date to sales
+      
         const salesMap = new Map();
         result.rows.forEach(row => {
             salesMap.set(row.date.toISOString().split('T')[0], parseFloat(row.total));
         });
 
-        // Fill in missing dates with 0
+    
         const currentDate = new Date(startDate);
         while (currentDate <= endDate) {
             const dateStr = currentDate.toISOString().split('T')[0];
@@ -248,7 +247,7 @@ app.get('/api/sales', authenticateAdmin, async (req, res) => {
     }
 });
 
-// Get top selling products
+
 app.get('/api/products/top', authenticateAdmin, async (req, res) => {
     try {
         const limit = parseInt(req.query.limit) || 5;
